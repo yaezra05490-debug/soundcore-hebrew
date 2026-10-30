@@ -1,0 +1,1700 @@
+diff --git a/gui/i18n/he/openscq30-gui.ftl b/gui/i18n/he/openscq30-gui.ftl
+index 7cfb7ba..2100f9b 100644
+--- a/gui/i18n/he/openscq30-gui.ftl
++++ b/gui/i18n/he/openscq30-gui.ftl
+@@ -2,46 +2,55 @@ language-name = עברית
+ openscq30 = OpenSCQ30
+ device-selection = בחירת מכשיר
+ select-device = בחר מכשיר
++connect = התחבר
+ connecting-to = מתחבר אל { $name }
+-prompt-remove-device-title = הסר מכשיר
+-prompt-remove-device = האם אתה בטוח שברצונך להסיר את { $name }?
++remove = הסר
++prompt-remove-device-title = הסרת מכשיר
++prompt-remove-device = להסיר את { $name }?
+ cancel = ביטול
+-name = שם
+ add-device = הוסף מכשיר
+ device-model = דגם המכשיר
+ select-device-model = בחר דגם מכשיר
+-select-your = בחר את ה-{ $name } שלך
++select-your = בחר את ה־{ $name } שלך
+ device-name = שם המכשיר
+-error-loading-devices = שגיאה בטעינת התקנים
+-loading-item = טוען את { $item }
+-device-list = רשימת התקנים
++error-loading-devices = שגיאה בטעינת המכשירים
++loading-item = טוען { $item }
++device-list = רשימת מכשירים
++refresh = רענן
+ error-with-message = שגיאה: { $err }
+ hz = { $hz } Hz
+-connect = התחבר
+-create = צור
+-delete = מחק
+-refresh = רענן
+ db = { $db } dB
+ activate = הפעל
+ active = פעיל
+ edit = ערוך
+-settings = הגדרות
+-none = ללא
+-remove = הסר
+ quick-presets = הגדרות מהירות
+-delete-confirm = האם אתה בטוח שאתה רוצה למחוק את { $name }?
++create-quick-preset = צור הגדרה מהירה
++delete-quick-preset = מחק הגדרה מהירה
++delete-confirm = למחוק את { $name }?
++name = שם
++create = צור
+ editing-quick-preset = עריכת הגדרה מהירה: { $name }
+-add-item = הוסף את { $name }
+-remove-item = הסר את { $name }
+-remove-item-confirm = האם הנך בטוח שברצונך להסיר את { $name }?
++save = שמור
++add-item = הוסף { $name }
++remove-item = הסר { $name }
++remove-item-confirm = להסיר את { $name }?
+ legacy-equalizer-profile-migration = העברת פרופילי אקולייזר ישנים
+ migrate = העבר
+ demo-mode = מצב הדגמה
+-create-quick-preset = צור הגדרה מהירה
+-delete-quick-preset = מחק הגדרה מהירה
+-save = שמור
+ overwrite-with-current-settings = החלף בהגדרות הנוכחיות
++delete = מחק
++none = ללא
+ confirm = אישור
+ execute = בצע
+ default = ברירת מחדל
+-preferred-language = שפה מועדפת
++settings = הגדרות
++preferred-language = שפה
++theme = ערכת צבעים
++system-theme = לפי Windows
++light-theme = בהירה
++dark-theme = כהה
++color-hue-in-degrees = גוון הצבע (במעלות)
++am = לפנה"צ
++pm = אחה"צ
++hour = שעה
++minute = דקה
+diff --git a/lib/i18n/he/openscq30-lib.ftl b/lib/i18n/he/openscq30-lib.ftl
+index 64c94fa..86f6ce5 100644
+--- a/lib/i18n/he/openscq30-lib.ftl
++++ b/lib/i18n/he/openscq30-lib.ftl
+@@ -1,5 +1,5 @@
+ soundcore-a3004 = Soundcore Q20I
+-equalizer = איקוולייזר
++soundcore-a3005 = Soundcore Q11i
+ soundcore-a3027 = Soundcore Life Q35
+ soundcore-a3028 = Soundcore Q30 / Life Q30
+ soundcore-a3029 = Soundcore Life Tune
+@@ -8,106 +8,196 @@ soundcore-a3031 = Soundcore Vortex
+ soundcore-a3033 = Soundcore Life 2 Neo
+ soundcore-a3035 = Soundcore Space One
+ soundcore-a3040 = Soundcore Space Q45
++soundcore-a3062 = Soundcore Space One Pro
+ soundcore-a3116 = Soundcore Motion+
++soundcore-a3330 = Soundcore C30i
++soundcore-a3388 = Soundcore AeroClip
++soundcore-a3876 = Soundcore V20i
++soundcore-a3909 = Soundcore Liberty 2 Pro
+ soundcore-a3926 = Soundcore Life Dot 2S
+ soundcore-a3930 = Soundcore Liberty 2 Pro+
+ soundcore-a3931 = Soundcore Life Dot 2 NC
+ soundcore-a3933 = Soundcore Life Note 3
+ soundcore-a3936 = Soundcore Space A40
++soundcore-a3944 = Soundcore Life P2 Mini
+ soundcore-a3945 = Soundcore Life Note 3S
+ soundcore-a3947 = Soundcore Liberty 4 NC
+ soundcore-a3948 = Soundcore A20i
+ soundcore-a3949 = Soundcore P20i / P25i / R50i
+ soundcore-a3951 = Soundcore Liberty Air 2 Pro
++soundcore-a3952 = Soundcore Liberty 3 Pro
++soundcore-a3953 = Soundcore Liberty 4
+ soundcore-a3939 = Soundcore Life P3
+-wind-noise-detected = זוהה רעש רוח
+-multi-scene-noise-canceling = סינון רעשים מרובי סצנות
+-disconnected = מנותק
+ soundcore-a3935 = Soundcore Life A2 NC
+ soundcore-a3959 = Soundcore P30i / R50i NC
++soundcore-a3968 = Soundcore Sport X20
++soundcore-a3954 = Soundcore Liberty 4 Pro
+ soundcore-a3955 = Soundcore P40i
+-soundcore-development = מידע פיתוח Soundcore
+-none = ללא
++soundcore-a3957 = Soundcore Liberty 5
++soundcore-d1101 = Soundcore C50i
++soundcore-d1202 = Soundcore P31i
++soundcore-d1202c = Soundcore R60i NC
++soundcore-d1203 = Soundcore Liberty 5 Pro
++soundcore-d1301 = Soundcore Sleep A30
++soundcore-development = מידע פיתוח של Soundcore
++
+ general = כללי
+-miscellaneous = שונות
++sound-modes = מצבי שמע
++equalizer = אקולייזר
++equalizer-import-export = ייבוא וייצוא של אקולייזר
++device-information = מידע על המכשיר
++miscellaneous = הגדרות נוספות
++
++ambient-sound-mode = מצב שמע סביבתי
++transparency-mode = מצב שקוף
+ noise-canceling-mode = מצב סינון רעשים
+ custom-noise-canceling = סינון רעשים מותאם אישית
+-preset-profile = פרופיל מובנה
+-custom-profile = פרופיל מותאם אישית
+-volume-adjustments = התאמות עוצמת שמע
+-import-custom-equalizer-profiles = ייבא פרופילים מותאמים אישית
+-sound-modes = מצבי שמע
+-equalizer-import-export = ייבוא/ייצוא אקולייזר
+-transparency-mode = מצב שקיפות
+-export-custom-equalizer-profiles-output = פלט ייצוא פרופילים מותאמים אישית
++preset-profile = פרופיל מוכן
++custom-profile = פרופיל אישי
++volume-adjustments = כוונון התדרים
++import-custom-equalizer-profiles = ייבוא פרופילים אישיים
++import-custom-equalizer-profiles-confirm = פרופילים קיימים עם אותו שם יוחלפו.
++export-custom-equalizer-profiles = ייצוא פרופילים אישיים
++export-custom-equalizer-profiles-output = תוצאת הייצוא
++
+ volume = עוצמת שמע
+-transparency = שקיפות
+-device-information = מידע על המכשיר
+-ambient-sound-mode = מצב צליל סביבתי
+-import-custom-equalizer-profiles-confirm = פעולה זו תחליף פרופילים קיימים בעלי אותם שמות.
+-export-custom-equalizer-profiles = ייצוא פרופילים מותאמים אישית
++
+ noise-canceling = סינון רעשים
++transparency = מצב שקוף
+ normal = רגיל
+-vocal-mode = מצב קולי
+-high-noise = רעש גבוה
+-manual-noise-canceling = סינון רעשים ידני
+-manual-transparency = שקיפות ידנית
+-weak = חלש
+-wind-noise-suppression = הפחתת רעשי רוח
+-connected = מחובר
+-multi-scene = מרובה סצנות
+-environment-detection = זיהוי סביבה
+-transportation = נסיעה
+-indoor = פנים
+-outdoor = חוץ
++indoor = בתוך מבנה
++outdoor = בחוץ
+ transport = תחבורה
+ custom = מותאם אישית
+-medium-noise = רעש בינוני
+-strong = חזק
+-fully-transparent = שקיפות מלאה
++vocal-mode = הדגשת קולות
++fully-transparent = שקוף לגמרי
+ adaptive = אדפטיבי
+ manual = ידני
+ adaptive-noise-canceling = סינון רעשים אדפטיבי
+ low-noise = רעש נמוך
+-moderate = מתון
+-adaptive-noise-canceling-sensitivity-level = רמת רגישות לסינון רעשים אדפטיבי
+-transportation-mode = מצב תחבורה
++medium-noise = רעש בינוני
++high-noise = רעש גבוה
++manual-noise-canceling = סינון רעשים ידני
++manual-transparency = מצב שקוף ידני
++weak = חלש
++moderate = בינוני
++strong = חזק
++wind-noise-suppression = הפחתת רעשי רוח
++wind-noise-detected = זוהה רעש רוח
++adaptive-noise-canceling-sensitivity-level = רגישות של סינון הרעשים האדפטיבי
++multi-scene = לכל סביבה
++multi-scene-noise-canceling = סינון רעשים לכל סביבה
++environment-detection = זיהוי סביבה
++transportation = כלי תחבורה
++transportation-mode = מצב כלי תחבורה
+ plane = מטוס
+ train = רכבת
+ bus = אוטובוס
+-car = מכונית
+-talk-mode = מצב דיבור
+-anc-personalized-to-ear-canal = סינון רעשים מותאם אישית לתעלת האוזן
++car = רכב
++talk-mode = מצב שיחה
++anc-personalized-to-ear-canal = סינון רעשים מותאם לתעלת האוזן
++manual-update = עדכון ידני
++automatic-update = עדכון אוטומטי
++airplane-mode = מצב מטוס
++airplane = מטוס
++real-time-adaptive-noise-canceling = סינון רעשים אדפטיבי בזמן אמת
++
+ soundcore-signature = Soundcore Signature
+ acoustic = אקוסטי
+-bass-booster = מגביר בס
+-bass-reducer = מפחית בס
+-classical = קלאסית
++bass-booster = הגברת בס
++bass-reducer = הנמכת בס
++classical = מוזיקה קלאסית
+ podcast = פודקאסט
+ dance = דאנס
+ deep = עמוק
+ electronic = אלקטרוני
+ flat = שטוח
+-hip-hop = היפ הופ
+-jazz = ג'ז
++hip-hop = היפ־הופ
++jazz = ג'אז
+ latin = לטיני
+-transparency-mode-in-cycle = מצב שקיפות בסבב
+-noise-canceling-mode-in-cycle = מצב סינון רעשים בסבב
++lounge = לאונג'
++piano = פסנתר
++pop = פופ
++rnb = R&B
++rock = רוק
++small-speakers = רמקולים קטנים
++spoken-word = דיבור
++treble-booster = הגברת טרבל
++treble-reducer = הנמכת טרבל
++bass-up = בס מוגבר
++bass-off = בלי בס
++voice = קול
++heavy = כבד
++classic = קלאסי
++original = מקורי
++balanced = מאוזן
++volume-booster = הגברת עוצמה
++
++button-configuration = הגדרת לחצנים ונגיעות
++buttons-enabled = לחצנים פעילים
++reset-buttons-to-default = החזר לברירת המחדל
++single-press = נגיעה אחת
++double-press = נגיעה כפולה
++left-single-press = שמאל – נגיעה אחת
++left-double-press = שמאל – נגיעה כפולה
++left-triple-press = שמאל – שלוש נגיעות
++left-long-press = שמאל – לחיצה ארוכה
++left-slide-up = שמאל – החלקה למעלה
++left-slide-down = שמאל – החלקה למטה
++right-single-press = ימין – נגיעה אחת
++right-double-press = ימין – נגיעה כפולה
++right-triple-press = ימין – שלוש נגיעות
++right-long-press = ימין – לחיצה ארוכה
++right-slide-up = ימין – החלקה למעלה
++right-slide-down = ימין – החלקה למטה
++volume-up = הגברת עוצמה
++volume-down = הנמכת עוצמה
++previous-song = השיר הקודם
++next-song = השיר הבא
++voice-assistant = עוזר קולי
++play-pause = הפעלה/השהיה
++# D1203 (Liberty 5 Pro) button actions
++previous-track = הרצועה הקודמת
++next-track = הרצועה הבאה
++ambient-sound = החלפת מצב שמע
++system-voice-assistant = העוזר הקולי של הטלפון
++ai-translation = תרגום AI
++anker-voice-assistant = העוזר הקולי של Anker
++normal-mode-in-cycle = מצב רגיל בסבב המצבים
++transparency-mode-in-cycle = מצב שקוף בסבב המצבים
++noise-canceling-mode-in-cycle = סינון רעשים בסבב המצבים
++
+ is-charging = בטעינה
+-battery-level = רמת סוללה
++battery-level = סוללה
+ is-charging-left = בטעינה (שמאל)
+-battery-level-left = רמת סוללה (שמאל)
++battery-level-left = סוללה (שמאל)
++is-charging-right = בטעינה (ימין)
++battery-level-right = סוללה (ימין)
++case-battery-level = סוללת הקופסה
++charging = בטעינה
++not-charging = לא בטעינה
++
++serial-number = מספר סידורי
+ firmware-version = גרסת קושחה
+ firmware-version-left = גרסת קושחה (שמאל)
+ firmware-version-right = גרסת קושחה (ימין)
+-tws-status = מצב אלחוטי אמיתי (TWS)
+-host-device = מכשיר מארח
++
++tws-status = חיבור בין שתי האוזניות (TWS)
++host-device = אוזנייה ראשית
++connected = מחובר
++disconnected = מנותק
+ left = שמאל
+ right = ימין
++
++none = ללא
++
+ state-update-packet = חבילת עדכון מצב
+-send-packet = שלח חבילה
++send-packet = שליחת חבילה
++
+ yes = כן
+ no = לא
++
++power-off = כיבוי
+ auto-power-off = כיבוי אוטומטי
+ x-minutes =
+     { $minutes ->
+@@ -121,68 +211,129 @@ x-seconds =
+         [two] שתי שניות
+        *[other] { $seconds } שניות
+     }
+-disabled = מושבת
+-touch-tone = צליל מגע
+-gaming-mode = מצב גיימינג
+-sound-leak-compensation = פיצוי על זליגת קול
++disabled = כבוי
++never = אף פעם
++
++touch-tone = צליל בנגיעה
++gaming-mode = מצב משחקים
++sound-leak-compensation = פיצוי על דליפת קול
+ surround-sound = צליל היקפי
+ auto-play-pause = הפעלה/השהיה אוטומטית
+-wearing-tone = צליל ענידה
+-touch-lock = נעילת מגע
++wearing-tone = צליל בהכנסה לאוזן
++touch-lock = נעילת נגיעות
+ low-battery-prompt = התראת סוללה חלשה
+-wearing-detection = זיהוי ענידה
+-voice-prompt = הנחיה קולית
+-limit-high-volume = הגבלת עוצמת קול גבוהה
++wearing-detection = זיהוי הכנסה לאוזן
++press-sensitivity = רגישות לחיצה
++ambient-sound-prompt = הודעה קולית בהחלפת מצב שמע
++voice-prompt = הודעות קוליות
++side-tone = שמיעת הקול שלך בשיחה
++dolby-audio = Dolby Audio
++ldac = LDAC (איכות שמע גבוהה)
++
++limit-high-volume = הגבלת עוצמה גבוהה
+ db-limit = מגבלת דציבלים
+-db-refresh-rate = קצב רענון דציבלים
++db-refresh-rate = קצב עדכון מד הדציבלים
+ real-time = זמן אמת
++
+ percent = { $percent }%
++
+ immersive-experience = חוויה סוחפת
+-movie-mode = מצב קולנוע
+-lounge = לאונג'
+-piano = פסנתר
+-pop = פופ
+-rnb = אר-אנד-בי
+-rock = רוק
+-small-speakers = רמקולים קטנים
+-spoken-word = מילה מדוברת
+-treble-reducer = מפחית טרבל
+-treble-booster = מגביר טרבל
+-bass-up = הגברת בס
+-bass-off = בס כבוי
+-voice = קול
+-heavy = כבד
+-classic = קלאסי
+-original = מקורי
+-button-configuration = הגדרות לחצנים
+-reset-buttons-to-default = אפס לחצנים לברירת מחדל
+-single-press = לחיצה בודדת
+-double-press = לחיצה כפולה
+-left-single-press = לחיצה בודדת שמאלית
+-left-double-press = לחיצה כפולה שמאלית
+-left-triple-press = לחיצה משולשת שמאלית
+-left-long-press = לחיצה ארוכה שמאלית
+-right-single-press = לחיצה בודדת ימנית
+-right-double-press = לחיצה כפולה ימנית
+-right-triple-press = לחיצה משולשת ימנית
+-right-long-press = לחיצה ארוכה ימנית
+-volume-up = הגברת עוצמת שמע
+-volume-down = הנמכת עוצמת שמע
+-previous-song = שיר קודם
+-next-song = שיר הבא
+-voice-assistant = עוזרת קולית
+-play-pause = הפעלה/השהיה
+-normal-mode-in-cycle = מצב רגיל בסבב
+-battery-level-right = רמת סוללה (ימנית)
+-is-charging-right = טעינה (ימנית)
+-case-battery-level = רמת סוללת הקייס
+-charging = טעינה
+-not-charging = לא בטעינה
+-serial-number = מספר סידורי
+-soundcore-a3957 = Soundcore Liberty 5
+-power-off = כיבוי
+-enabled = מופעל
++movie-mode = מצב סרטים
++enabled = פעיל
+ pressure-sensitivity = רגישות ללחץ
+-softest = הרך ביותר
++softest = הכי רך
+ medium = בינוני
+-firmest = הקשה ביותר
++firmest = הכי חזק
++
++dual-connections = חיבור לשני מכשירים
++dual-connections-devices = מכשירים מחוברים
++
++fixed = קבוע
++head-tracking = מעקב אחרי תנועת הראש
++
++music = מוזיקה
++movie = סרטים
++gaming = משחקים
++
++case = קופסה
++case-language = שפת הקופסה
++atmospheric = אווירה
++remote-camera = שלט למצלמה
++find-device = איתור המכשיר
++spatial-audio = שמע מרחבי
++spatial-audio-mode = מצב שמע מרחבי
++spatial-audio-music-mode = שמע מרחבי למוזיקה
++case-serial-number = מספר סידורי של הקופסה
++case-firmware-version = גרסת קושחה של הקופסה
++
++air-pressure = לחץ אוויר
++x-standard-atmospheres = { $pressure } אטמוספרות
++
++easy-chat = שיחה קלה (Easy Chat)
++easy-chat-wait-time = זמן המתנה בשיחה קלה
++
++volume-balance = איזון ימין/שמאל
++
++lights = תאורה
++lights-enabled = תאורה צבעונית פעילה
++lights-brightness = בהירות התאורה
++lights-color = צבע התאורה
++lights-mode = סגנון התאורה
++auto-lights-off-minutes = כיבוי תאורה אוטומטי (דקות)
++light-on = דולקת
++breathing = נשימה
++flash = הבהוב
++music-follows = לפי המוזיקה
++
++bluetooth = בלוטות'
++local = מקומי
++
++nature = טבע
++glow = זוהר
++rhythm = קצב
++bloom = פריחה
++
++sunday = יום ראשון
++monday = יום שני
++tuesday = יום שלישי
++wednesday = יום רביעי
++thursday = יום חמישי
++friday = יום שישי
++saturday = שבת
++
++change-mode = החלפת מצב
++
++auto-power-off-prompt = הודעה לפני כיבוי אוטומטי
++listening-mode-prompt = הודעה קולית על מצב האזנה
++incoming-calls-during-bluetooth-mode = שיחות נכנסות במצב בלוטות'
++noise-canceling-prompt = הודעה קולית על סינון רעשים
++
++auto-stop-timer = טיימר עצירה אוטומטית
++auto-stop-timer-duration = משך הטיימר
++auto-switch-once-asleep = מעבר אוטומטי אחרי שנרדמים
++keep-audio = המשך השמע
++pause-audio = השהיית השמע
++play-local-audio = השמעה מקומית, בלי סינון רעשים
++
++alarms = שעונים מעוררים
++
++listening-mode = מצב האזנה
++default-listening-mode = מצב האזנה רגיל
++
++decline-call = דחיית שיחה
++answer-call = מענה לשיחה
++left-double-press-during-call = שמאל – נגיעה כפולה (בשיחה)
++right-double-press-during-call = ימין – נגיעה כפולה (בשיחה)
++left-long-press-during-call = שמאל – לחיצה ארוכה (בשיחה)
++right-long-press-during-call = ימין – לחיצה ארוכה (בשיחה)
++
++create-alarm = הוספת שעון מעורר
++delete-alarm-n = מחיקת שעון מעורר { $number }
++alarm-n-enabled = שעון מעורר { $number } פעיל
++alarm-n-time = שעה של שעון מעורר { $number }
++alarm-n-repeat = ימי חזרה של שעון מעורר { $number }
++alarm-n-wake-up-tune = מנגינה של שעון מעורר { $number }
++alarm-n-volume = עוצמה של שעון מעורר { $number }
++alarm-n-snooze-duration-minutes = נודניק של שעון מעורר { $number } (דקות)
++
++both-earbuds-must-be-connected = שתי האוזניות צריכות להיות מחוברות.
+diff --git a/lib/src/devices/soundcore/d1203.rs b/lib/src/devices/soundcore/d1203.rs
+index c6cb97e..77ce353 100644
+--- a/lib/src/devices/soundcore/d1203.rs
++++ b/lib/src/devices/soundcore/d1203.rs
+@@ -35,6 +35,8 @@ soundcore_device!(
+             max_level: 100,
+             level_offset: 0,
+         });
++        // Case battery is also a 0-100 percentage (state packet tag 8).
++        builder.case_battery_level(100);
+         builder.serial_number_and_dual_firmware_version();
+         // Ambient sound mode (ANC / Transparency / Normal / Adaptive). The
+         // D1203 write command is byte-for-byte identical to the A3957
+@@ -48,9 +50,7 @@ soundcore_device!(
+         // `packet::Outbound` serializer (no raw framing needed -- unlike the EQ
+         // `03 8a` command, the `06 81` length field is standard).
+         //
+-        // TODO(read): the current ambient sound mode is initialized to Default
+-        // on connect because the D1203 state-packet TLV tag for it is not yet
+-        // identified. Writes apply correctly regardless (including Adaptive=3).
++        // The current values are read from state packet tags 36-38.
+         let sound_modes_packet_io = builder.packet_io_controller().clone();
+         builder
+             .module_collection()
+@@ -71,9 +71,7 @@ soundcore_device!(
+         // total packet size INCLUDING the checksum), so it goes through the
+         // generic `packet::Outbound` serializer, not the raw EQ path.
+         //
+-        // TODO(read): the current wind-noise state is initialized to Default
+-        // (OFF) on connect because its state-packet TLV tag is not yet
+-        // identified. Writes apply correctly regardless.
++        // The current value is bit 11 of state packet tag 27.
+         let wind_noise_packet_io = builder.packet_io_controller().clone();
+         builder
+             .module_collection()
+@@ -85,9 +83,7 @@ soundcore_device!(
+         // `packet::Outbound` serializer (standard framing). See
+         // `modules::button_configuration`.
+         //
+-        // TODO(read): the D1203 state packet does not expose button
+-        // configuration in any known form, so the 8 actions are initialized to
+-        // Default (PlayPause) on connect. Writes apply correctly regardless.
++        // The current actions are read from state packet tags 13-20.
+         let button_configuration_packet_io = builder.packet_io_controller().clone();
+         builder
+             .module_collection()
+@@ -102,9 +98,8 @@ soundcore_device!(
+         //     [sub_id, 0|1] (sub 2 / 14 / 29; sub 11 = wind noise is separate).
+         //   - Auto Power Off: command 01 86, payload [enabled, duration_idx].
+         //
+-        // TODO(read): the current value of each of these is initialized to
+-        // Default on connect because their state-packet TLV tags are not yet
+-        // identified. Writes apply correctly regardless. See modules::misc.
++        // The current values are read from state packet tags 25-27; see
++        // modules::misc.
+         let misc_packet_io = builder.packet_io_controller().clone();
+         builder
+             .module_collection()
+@@ -339,14 +334,14 @@ mod tests {
+                 .collect()
+         }
+ 
+-        // The device state is initialized to the default sound mode
+-        // (NoiseCanceling), so setting NoiseCanceling again is a no-op and may
+-        // emit no packet. When a 06 81 packet IS emitted it must carry ambient
+-        // byte 0. (The deterministic byte test above already pins ANC -> 0.)
++        // The capture is in Normal mode (tag 36 = [2, 0, 0]), so every other
++        // mode must emit a 06 81 packet and Normal itself is a no-op.
+         let anc_packets = sent_06_81_payloads("NoiseCanceling").await;
+-        for pkt in &anc_packets {
+-            assert_eq!(pkt[9], 0x00, "ANC payload[0] must be 0");
+-        }
++        assert!(
++            !anc_packets.is_empty(),
++            "expected at least one 06 81 packet for NoiseCanceling"
++        );
++        assert_eq!(anc_packets.last().unwrap()[9], 0x00, "ANC payload[0] must be 0");
+ 
+         // Transparency differs from the default, so it MUST emit at least one
+         // 06 81 packet, and the target (last) packet carries ambient byte 1.
+@@ -358,20 +353,15 @@ mod tests {
+         let last_transparency = transparency_packets.last().unwrap();
+         assert_eq!(last_transparency[9], 0x01, "Transparency payload[0] must be 1");
+ 
+-        // Normal (2) and Adaptive (3) are the modes the old A3957 enum could
+-        // NOT represent. Driving the setting must emit a 06 81 packet whose
+-        // target ambient byte is 2 and 3 respectively.
++        // Already in Normal (2), read back from the state packet.
+         let normal_packets = sent_06_81_payloads("Normal").await;
+         assert!(
+-            !normal_packets.is_empty(),
+-            "expected at least one 06 81 packet for Normal"
+-        );
+-        assert_eq!(
+-            normal_packets.last().unwrap()[9],
+-            0x02,
+-            "Normal payload[0] must be 2"
++            normal_packets.is_empty(),
++            "Normal is the current mode, so nothing should be sent"
+         );
+ 
++        // Adaptive (3) is the mode the old A3957 enum could NOT represent.
++
+         let adaptive_packets = sent_06_81_payloads("Adaptive").await;
+         assert!(
+             !adaptive_packets.is_empty(),
+@@ -421,29 +411,33 @@ mod tests {
+             })
+         }
+ 
+-        // Touch Tone ON (41 87 sub 0) -> ...41 87 0c 00 00 01 cb
+-        let packets = sent_packets(SettingId::TouchTone, Value::Bool(true)).await;
++        // The capture has every 41 87 toggle on (tag 26 = 255), Easy Chat and
++        // Soundstage on and LDAC / dual connections off (tag 27 = [8, 73, 16,
++        // 32]), so each case below writes the opposite of the captured value.
++
++        // Touch Tone OFF (41 87 sub 0) -> ...41 87 0c 00 00 00 ca
++        let packets = sent_packets(SettingId::TouchTone, Value::Bool(false)).await;
+         let pkt = find_by_command(&packets, [0x41, 0x87]).expect("41 87 packet for TouchTone");
+         assert_eq!(
+             &pkt[pkt.len() - 7..],
+-            &[0x41, 0x87, 0x0c, 0x00, 0x00, 0x01, 0xcb]
++            &[0x41, 0x87, 0x0c, 0x00, 0x00, 0x00, 0xca]
+         );
+ 
+-        // Low Battery Prompt ON (41 87 sub 1) -> ...41 87 0c 00 01 01 cc
+-        let packets = sent_packets(SettingId::LowBatteryPrompt, Value::Bool(true)).await;
++        // Low Battery Prompt OFF (41 87 sub 1) -> ...41 87 0c 00 01 00 cb
++        let packets = sent_packets(SettingId::LowBatteryPrompt, Value::Bool(false)).await;
+         let pkt =
+             find_by_command(&packets, [0x41, 0x87]).expect("41 87 packet for LowBatteryPrompt");
+         assert_eq!(
+             &pkt[pkt.len() - 7..],
+-            &[0x41, 0x87, 0x0c, 0x00, 0x01, 0x01, 0xcc]
++            &[0x41, 0x87, 0x0c, 0x00, 0x01, 0x00, 0xcb]
+         );
+ 
+-        // Wearing Tone ON (41 87 sub 3) -> ...41 87 0c 00 03 01 ce
+-        let packets = sent_packets(SettingId::WearingTone, Value::Bool(true)).await;
++        // Wearing Tone OFF (41 87 sub 3) -> ...41 87 0c 00 03 00 cd
++        let packets = sent_packets(SettingId::WearingTone, Value::Bool(false)).await;
+         let pkt = find_by_command(&packets, [0x41, 0x87]).expect("41 87 packet for WearingTone");
+         assert_eq!(
+             &pkt[pkt.len() - 7..],
+-            &[0x41, 0x87, 0x0c, 0x00, 0x03, 0x01, 0xce]
++            &[0x41, 0x87, 0x0c, 0x00, 0x03, 0x00, 0xcd]
+         );
+ 
+         // LDAC ON (41 88 sub 2) -> ...41 88 0c 00 02 01 ce
+@@ -454,26 +448,25 @@ mod tests {
+             &[0x41, 0x88, 0x0c, 0x00, 0x02, 0x01, 0xce]
+         );
+ 
+-        // Easy Chat ON (41 88 sub 14) -> ...41 88 0c 00 0e 01 da
+-        // (default is OFF, so setting ON must emit a packet.)
+-        let packets = sent_packets(SettingId::EasyChat, Value::Bool(true)).await;
++        // Easy Chat OFF (41 88 sub 14) -> ...41 88 0c 00 0e 00 d9
++        let packets = sent_packets(SettingId::EasyChat, Value::Bool(false)).await;
+         let pkt = find_by_command(&packets, [0x41, 0x88]).expect("41 88 packet for EasyChat");
+         assert_eq!(
+             &pkt[pkt.len() - 7..],
+-            &[0x41, 0x88, 0x0c, 0x00, 0x0e, 0x01, 0xda]
++            &[0x41, 0x88, 0x0c, 0x00, 0x0e, 0x00, 0xd9]
+         );
+ 
+-        // Soundstage ON via SpatialAudio (41 88 sub 29) -> ...41 88 0c 00 1d 01 e9
+-        let packets = sent_packets(SettingId::SpatialAudio, Value::Bool(true)).await;
++        // Soundstage OFF via SpatialAudio (41 88 sub 29) -> ...41 88 0c 00 1d 00 e8
++        let packets = sent_packets(SettingId::SpatialAudio, Value::Bool(false)).await;
+         let pkt =
+             find_by_command(&packets, [0x41, 0x88]).expect("41 88 packet for Soundstage");
+         assert_eq!(
+             &pkt[pkt.len() - 7..],
+-            &[0x41, 0x88, 0x0c, 0x00, 0x1d, 0x01, 0xe9]
++            &[0x41, 0x88, 0x0c, 0x00, 0x1d, 0x00, 0xe8]
+         );
+ 
+         // Auto Power Off = 60 minutes (01 86, [1, 3]) -> ...01 86 0c 00 01 03 8d
+-        // (default is Never/disabled, so a timed value must emit a packet.)
++        // (the capture is at 30 minutes, so 60 must emit a packet.)
+         let packets = sent_packets(
+             SettingId::AutoPowerOff,
+             Value::String("60m".to_string().into()),
+diff --git a/lib/src/devices/soundcore/d1203/modules.rs b/lib/src/devices/soundcore/d1203/modules.rs
+index 3babfe2..a84fcbc 100644
+--- a/lib/src/devices/soundcore/d1203/modules.rs
++++ b/lib/src/devices/soundcore/d1203/modules.rs
+@@ -12,10 +12,10 @@ pub use ambient_sound_mode::{
+     D1203AmbientSoundMode, D1203ManualNoiseCanceling, D1203NoiseCancelingMode,
+     D1203TransportationMode,
+ };
+-pub use button_configuration::D1203ButtonConfiguration;
++pub use button_configuration::{D1203Button, D1203ButtonAction, D1203ButtonConfiguration};
+ pub use misc::{
+-    D1203AutoPowerOff, D1203EasyChat, D1203Ldac, D1203LowBatteryPrompt, D1203Soundstage,
+-    D1203TouchTone, D1203WearingTone,
++    D1203AutoPowerOff, D1203DualConnections, D1203EasyChat, D1203Ldac, D1203LowBatteryPrompt,
++    D1203Soundstage, D1203SoundstageSupported, D1203TouchTone, D1203WearingTone,
+ };
+ // Re-exported for the device-level integration tests in `d1203.rs`; the
+ // non-test code references them via their own module path, so they read as
+diff --git a/lib/src/devices/soundcore/d1203/modules/button_configuration.rs b/lib/src/devices/soundcore/d1203/modules/button_configuration.rs
+index 5810050..64b31e4 100644
+--- a/lib/src/devices/soundcore/d1203/modules/button_configuration.rs
++++ b/lib/src/devices/soundcore/d1203/modules/button_configuration.rs
+@@ -55,10 +55,11 @@
+ //! `Select` settings under [`CategoryId::ButtonConfiguration`]. The write path
+ //! is the only one that is known to work.
+ //!
+-//! TODO(read): the D1203 state packet does not expose button configuration in
+-//! any known form (state read-back for the D1203 has been investigated and is
+-//! infeasible for most fields), so the 8 actions are initialized to `Default`
+-//! on connect. Writing works regardless.
++//! The state packet carries one TLV per side x gesture, `[action, b3]`, in the
++//! order of [`D1203Button::ALL`] starting at tag 13 (13 = left single press,
++//! 14 = right single press, ... 20 = right long press). Tags 21-24 follow the
++//! same layout for the swipes, which are not remappable. Confirmed on firmware
++//! 05.33 by remapping each button and diffing the state packet.
+ 
+ use std::sync::Arc;
+ 
+@@ -230,8 +231,9 @@ impl D1203Button {
+     }
+ 
+     /// Index of this button in [`D1203ButtonConfiguration`]'s action array,
+-    /// matching the order of [`D1203Button::ALL`].
+-    fn index(self) -> usize {
++    /// matching the order of [`D1203Button::ALL`]. The state packet tag is
++    /// `13 + index`.
++    pub fn index(self) -> usize {
+         Self::ALL
+             .into_iter()
+             .position(|button| button == self)
+@@ -250,9 +252,9 @@ impl D1203Button {
+ /// of [`D1203Button::ALL`]. Stored in [`D1203State`] so the state modifier can
+ /// tell which buttons actually changed.
+ ///
+-/// TODO(read): the D1203 state packet does not expose button configuration, so
+-/// every button defaults to `PlayPause` on connect (a valid action for every
+-/// gesture, including single press). Writing works regardless.
++/// Read from tags 13-20 of the state packet. When a tag is missing the button
++/// defaults to `PlayPause` (a valid action for every gesture, including single
++/// press).
+ #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+ pub struct D1203ButtonConfiguration {
+     actions: [D1203ButtonAction; 8],
+diff --git a/lib/src/devices/soundcore/d1203/modules/misc.rs b/lib/src/devices/soundcore/d1203/modules/misc.rs
+index 539affb..34b49d2 100644
+--- a/lib/src/devices/soundcore/d1203/modules/misc.rs
++++ b/lib/src/devices/soundcore/d1203/modules/misc.rs
+@@ -39,11 +39,22 @@
+ //! Never:      08 ee 00 00 00 01 86 0c 00 00 00 89   (payload [0, 0])
+ //! ```
+ //!
+-//! TODO(read): the D1203 state packet TLV tags carrying the current value of
+-//! each of these settings are not yet identified, so they are all initialized
+-//! to `Default` on connect. Writing works regardless; only reading back the
+-//! device's current state is outstanding — exactly as for every other D1203
+-//! write-only setting.
++//! ## Read-back
++//!
++//! The current values come from the state packet (see
++//! `packets::inbound::state_update`): tag 26 is a bitfield indexed by the
++//! `41 87` sub-id, tag 27 a little-endian bitfield indexed by the `41 88`
++//! sub-id, and tag 25 is the `01 86` payload verbatim.
++//!
++//! Firmware 05.33 sends only three bytes in tag 27 (no Soundstage bit) and
++//! NAKs the sub-id 29 write, so Soundstage is only exposed when the state
++//! packet carries that bit ([`D1203SoundstageSupported`]).
++//!
++//! Dual connections is read from tag 44 byte 0 but not exposed as a setting:
++//! the device turns it off by itself whenever LDAC is turned on (tag 27 bit 17
++//! clears at the same time), and neither `41 88` sub-id 17 (echoed, no effect)
++//! nor the common `0b 84` command (no response) turns it back on. The real
++//! write command still needs a capture from the official app.
+ 
+ use std::sync::Arc;
+ 
+@@ -246,6 +257,47 @@ bool_toggle_state!(
+     /// [`SettingId::SpatialAudio`] setting. Defaults to `false` (OFF).
+     D1203Soundstage
+ );
++bool_toggle_state!(
++    /// Dual connections / multipoint, read-only for now (see the module docs).
++    D1203DualConnections
++);
++bool_toggle_state!(
++    /// Whether the firmware reports (and accepts) Soundstage, i.e. whether tag
++    /// 27 of the state packet is long enough to hold sub-id 29. Not a setting.
++    D1203SoundstageSupported
++);
++
++/// The Soundstage toggle, hidden (`None`) on firmware that does not support it.
++struct SoundstageSettingHandler;
++
++#[async_trait]
++impl<T> SettingHandler<T> for SoundstageSettingHandler
++where
++    T: Has<D1203Soundstage> + Has<D1203SoundstageSupported> + Send,
++{
++    fn settings(&self) -> Vec<SettingId> {
++        vec![SettingId::SpatialAudio]
++    }
++
++    fn get(&self, state: &T, _setting_id: &SettingId) -> Option<Setting> {
++        let supported: &D1203SoundstageSupported = state.get();
++        if !supported.0 {
++            return None;
++        }
++        let current: &D1203Soundstage = state.get();
++        Some(Setting::Toggle { value: current.0 })
++    }
++
++    async fn set(
++        &self,
++        state: &mut T,
++        _setting_id: &SettingId,
++        value: Value,
++    ) -> SettingHandlerResult<()> {
++        *Has::<D1203Soundstage>::get_mut(state) = D1203Soundstage(value.try_as_bool()?);
++        Ok(())
++    }
++}
+ 
+ // ===========================================================================
+ // Auto power off selector
+@@ -410,11 +462,8 @@ impl ModuleCollection<D1203State> {
+             command: TOGGLE_41_88_COMMAND,
+             sub_id: SUB_EASY_CHAT,
+         });
+-        self.add_d1203_toggle::<D1203Soundstage>(ToggleSpec {
+-            setting_id: SettingId::SpatialAudio,
+-            command: TOGGLE_41_88_COMMAND,
+-            sub_id: SUB_SOUNDSTAGE,
+-        });
++        self.setting_manager
++            .add_handler(CategoryId::Miscellaneous, SoundstageSettingHandler);
+ 
+         // Auto power off selector (01 86).
+         self.setting_manager
+diff --git a/lib/src/devices/soundcore/d1203/packets/inbound/state_update.rs b/lib/src/devices/soundcore/d1203/packets/inbound/state_update.rs
+index c8e741b..6f6f12e 100644
+--- a/lib/src/devices/soundcore/d1203/packets/inbound/state_update.rs
++++ b/lib/src/devices/soundcore/d1203/packets/inbound/state_update.rs
+@@ -6,13 +6,22 @@ use nom::{
+ };
+ 
+ use crate::devices::soundcore::{
+-    d1203::state::D1203State,
++    d1203::{
++        modules::{
++            D1203AmbientSoundMode, D1203AutoPowerOff, D1203Button, D1203ButtonAction,
++            D1203ButtonConfiguration, D1203DualConnections, D1203EasyChat, D1203Ldac,
++            D1203LowBatteryPrompt, D1203ManualNoiseCanceling, D1203NoiseCancelingMode,
++            D1203Soundstage, D1203SoundstageSupported, D1203TouchTone, D1203TransportationMode,
++            D1203WearingTone, D1203WindNoise, build_sound_mode_payload,
++        },
++        state::D1203State,
++    },
+     common::{
+         macros::state_update_packet_module,
+         packet::{self, Command, inbound::FromPacketBody, outbound::ToPacket},
+         structures::{
+-            BatteryLevel, DualBattery, DualFirmwareVersion, FirmwareVersion, IsBatteryCharging,
+-            SerialNumber, SingleBattery,
++            BatteryLevel, CaseBatteryLevel, DualBattery, DualFirmwareVersion, FirmwareVersion,
++            IsBatteryCharging, SerialNumber, SingleBattery,
+         },
+     },
+ };
+@@ -30,14 +39,51 @@ const TAG_BATTERY_RIGHT: u8 = 4;
+ const TAG_FIRMWARE_LEFT: u8 = 5;
+ const TAG_FIRMWARE_RIGHT: u8 = 6;
+ const TAG_SERIAL_NUMBER: u8 = 7;
+-// TODO: tag 8 is believed to be the charging-case battery, but its encoding
+-// stayed ambiguous across captures, so case battery is intentionally not
+-// decoded yet.
++/// Charging case battery, `[?, level]` with a 0-100 level. Went from 1 to 70
++/// after the earbuds were docked, matching the case byte of the `01 03` battery
++/// packet (`[left, right, case]`). Reads 1 until the earbuds have been in the
++/// case since connecting.
++const TAG_CASE_BATTERY: u8 = 8;
+ 
+ /// EQ preset tag. Value is `[preset_id, 0]`. The second byte is always 0 for
+ /// the named presets; the "Custom" preset is encoded as `[0xFE, 0xFE]`.
+ const TAG_EQ_PRESET: u8 = 11;
+ 
++// The tags below were identified on firmware 05.33 by writing each setting with
++// its known command and diffing the state packet before and after, and (for the
++// ambient sound mode) by switching modes with the earbud's long press.
++
++/// Button configuration: one tag per [`D1203Button`], `13 + D1203Button::index()`,
++/// each `[action, b3]`.
++const TAG_BUTTON_FIRST: u8 = 13;
++/// Auto power off: the `01 86` payload verbatim, `[enabled, duration_idx]`.
++const TAG_AUTO_POWER_OFF: u8 = 25;
++/// `41 87` toggles: a bitfield where bit N is sub-id N.
++const TAG_TOGGLES_41_87: u8 = 26;
++/// `41 88` toggles: a little-endian bitfield where bit N (byte N / 8) is sub-id
++/// N. Three bytes long on firmware 05.33, four on 04.52.
++const TAG_TOGGLES_41_88: u8 = 27;
++/// `[ambient_sound_mode, noise_canceling_mode, transparency_mode]`, i.e. bytes
++/// 0-2 of the `06 81` payload.
++const TAG_SOUND_MODE: u8 = 36;
++/// `[manual_noise_canceling_level, ?]`, byte 0 is byte 3 of the `06 81` payload.
++const TAG_MANUAL_NOISE_CANCELING: u8 = 37;
++/// `[byte5, ?]`, byte 0 is byte 5 of the `06 81` payload: the transport type
++/// while the NC sub-mode is Transportation, otherwise the active flag.
++const TAG_SOUND_MODE_BYTE5: u8 = 38;
++/// `[dual_connections_enabled, 2, ?]`. Byte 0 dropped to 0 when LDAC was
++/// turned on, together with tag 27 bit 17.
++const TAG_DUAL_CONNECTIONS: u8 = 44;
++
++// `41 87` / `41 88` sub-ids, mirrored from `modules::misc` / `modules::wind_noise`.
++const SUB_TOUCH_TONE: u8 = 0;
++const SUB_LOW_BATTERY_PROMPT: u8 = 1;
++const SUB_WEARING_TONE: u8 = 3;
++const SUB_LDAC: u8 = 2;
++const SUB_WIND_NOISE: u8 = 11;
++const SUB_EASY_CHAT: u8 = 14;
++const SUB_SOUNDSTAGE: u8 = 29;
++
+ /// The currently-selected EQ preset on the D1203, decoded from tag 11 of the
+ /// state packet.
+ ///
+@@ -109,110 +155,77 @@ impl Default for D1203PresetEqualizer {
+     }
+ }
+ 
++/// Reads bit `sub_id` of a little-endian bitfield, `None` when the field is too
++/// short to contain it.
++fn bit(bitfield: &[u8], sub_id: u8) -> Option<bool> {
++    bitfield
++        .get(usize::from(sub_id / 8))
++        .map(|byte| byte & (1 << (sub_id % 8)) != 0)
++}
++
++fn set_bit(bitfield: &mut [u8], sub_id: u8, value: bool) {
++    if value {
++        bitfield[usize::from(sub_id / 8)] |= 1 << (sub_id % 8);
++    }
++}
++
++fn auto_power_off_from_wire(value: &[u8]) -> Option<D1203AutoPowerOff> {
++    match value {
++        [0, _] => Some(D1203AutoPowerOff::Never),
++        [_, 0] => Some(D1203AutoPowerOff::TenMinutes),
++        [_, 1] => Some(D1203AutoPowerOff::TwentyMinutes),
++        [_, 2] => Some(D1203AutoPowerOff::ThirtyMinutes),
++        [_, 3] => Some(D1203AutoPowerOff::SixtyMinutes),
++        _ => None,
++    }
++}
++
+ /// State update packet for the Soundcore Liberty 5 Pro (D1203).
+ ///
+ /// The D1203 encodes its state as a 6 byte prefix followed by a sequence of
+-/// TLV fields `[tag(1)][length(1)][value(length)]`. It extracts the earbud
+-/// battery levels (tags 3/4), firmware versions (tags 5 and 6) and serial
+-/// number (tag 7). Every other tag is read and ignored, so new/unknown tags
+-/// never fail the parse.
+-#[derive(Debug, Clone, PartialEq, Eq)]
++/// TLV fields `[tag(1)][length(1)][value(length)]`. Every tag we have not
++/// identified is read and ignored, so new/unknown tags never fail the parse,
++/// and a missing tag leaves its fields at their defaults.
++#[derive(Debug, Clone, PartialEq, Eq, Default)]
+ pub struct D1203StateUpdatePacket {
+     pub dual_battery: DualBattery,
++    /// Tag 8 byte 1.
++    pub case_battery_level: CaseBatteryLevel,
+     pub dual_firmware_version: DualFirmwareVersion,
+     pub serial_number: SerialNumber,
+     /// EQ preset reported by tag 11 (read-only/informational).
+     pub preset_equalizer: D1203PresetEqualizer,
+-    /// Current ambient sound mode (ANC / Transparency / Normal / Adaptive).
+-    ///
+-    /// TODO: the D1203 state packet TLV tag carrying the ambient sound mode is
+-    /// not yet known (a full capture is pending), so this is always `Default`
+-    /// after a parse. The write path (command `06 81`) is fully functional,
+-    /// including value 3 = Adaptive; only the read-back of the device's current
+-    /// mode is outstanding.
+-    pub ambient_sound_mode: crate::devices::soundcore::d1203::modules::D1203AmbientSoundMode,
+-    /// Current noise-canceling sub-mode (Manual / Transportation).
+-    ///
+-    /// TODO: the TLV tag carrying this is not yet known, so it is always
+-    /// `Default` (Manual) after a parse. The write path (`06 81`) is fully
+-    /// functional; only read-back is outstanding.
+-    pub nc_mode: crate::devices::soundcore::d1203::modules::D1203NoiseCancelingMode,
+-    /// Current manual ANC level (1..=5).
+-    ///
+-    /// TODO: the TLV tag carrying this is not yet known, so it is always
+-    /// `Default` (level 1) after a parse. The write path is fully functional;
+-    /// only read-back is outstanding.
+-    pub manual_nc_level: crate::devices::soundcore::d1203::modules::D1203ManualNoiseCanceling,
+-    /// Current transport type (Airplane / Car) used inside Transportation.
+-    ///
+-    /// TODO: the TLV tag carrying this is not yet known, so it is always
+-    /// `Default` (Airplane) after a parse. The write path (`06 81`) is fully
+-    /// functional; only read-back is outstanding.
+-    pub transportation_mode: crate::devices::soundcore::d1203::modules::D1203TransportationMode,
+-    /// Current wind noise reduction state.
+-    ///
+-    /// TODO: the TLV tag carrying this is not yet known, so it is always
+-    /// `Default` (OFF) after a parse. The write path (dedicated command
+-    /// `41 88`) is fully functional; only read-back is outstanding.
+-    pub wind_noise: crate::devices::soundcore::d1203::modules::D1203WindNoise,
+-    /// Touch Tone toggle (`41 87` sub-id 0).
+-    ///
+-    /// TODO: read-back not yet decoded; always `Default` (OFF) after a parse.
+-    /// The write path is fully functional.
+-    pub touch_tone: crate::devices::soundcore::d1203::modules::D1203TouchTone,
+-    /// Low Battery Prompt toggle (`41 87` sub-id 1).
+-    ///
+-    /// TODO: read-back not yet decoded; always `Default` (OFF) after a parse.
+-    /// The write path is fully functional.
+-    pub low_battery_prompt: crate::devices::soundcore::d1203::modules::D1203LowBatteryPrompt,
+-    /// Wearing Tone toggle (`41 87` sub-id 3).
+-    ///
+-    /// TODO: read-back not yet decoded; always `Default` (OFF) after a parse.
+-    /// The write path is fully functional.
+-    pub wearing_tone: crate::devices::soundcore::d1203::modules::D1203WearingTone,
+-    /// LDAC codec toggle (`41 88` sub-id 2).
+-    ///
+-    /// TODO: read-back not yet decoded; always `Default` (OFF) after a parse.
+-    /// The write path is fully functional.
+-    pub ldac: crate::devices::soundcore::d1203::modules::D1203Ldac,
+-    /// Easy Chat toggle (`41 88` sub-id 14).
+-    ///
+-    /// TODO: read-back not yet decoded; always `Default` (OFF) after a parse.
+-    /// The write path is fully functional.
+-    pub easy_chat: crate::devices::soundcore::d1203::modules::D1203EasyChat,
+-    /// Soundstage / Soundfield rendering toggle (`41 88` sub-id 29).
+-    ///
+-    /// TODO: read-back not yet decoded; always `Default` (OFF) after a parse.
+-    /// The write path is fully functional.
+-    pub soundstage: crate::devices::soundcore::d1203::modules::D1203Soundstage,
+-    /// Auto power off selector (`01 86`).
+-    ///
+-    /// TODO: read-back not yet decoded; always `Default` (Never) after a parse.
+-    /// The write path is fully functional.
+-    pub auto_power_off: crate::devices::soundcore::d1203::modules::D1203AutoPowerOff,
+-}
+-
+-impl Default for D1203StateUpdatePacket {
+-    fn default() -> Self {
+-        Self {
+-            dual_battery: Default::default(),
+-            dual_firmware_version: Default::default(),
+-            serial_number: Default::default(),
+-            preset_equalizer: Default::default(),
+-            ambient_sound_mode: Default::default(),
+-            nc_mode: Default::default(),
+-            manual_nc_level: Default::default(),
+-            transportation_mode: Default::default(),
+-            wind_noise: Default::default(),
+-            touch_tone: Default::default(),
+-            low_battery_prompt: Default::default(),
+-            wearing_tone: Default::default(),
+-            ldac: Default::default(),
+-            easy_chat: Default::default(),
+-            soundstage: Default::default(),
+-            auto_power_off: Default::default(),
+-        }
+-    }
++    /// Tag 36 byte 0.
++    pub ambient_sound_mode: D1203AmbientSoundMode,
++    /// Tag 36 byte 1.
++    pub nc_mode: D1203NoiseCancelingMode,
++    /// Tag 37 byte 0.
++    pub manual_nc_level: D1203ManualNoiseCanceling,
++    /// Tag 38 byte 0, only meaningful while `nc_mode` is Transportation; left
++    /// at the default otherwise.
++    pub transportation_mode: D1203TransportationMode,
++    /// Tag 27, `41 88` sub-id 11.
++    pub wind_noise: D1203WindNoise,
++    /// Tags 13-20.
++    pub button_configuration: D1203ButtonConfiguration,
++    /// Tag 26, `41 87` sub-id 0.
++    pub touch_tone: D1203TouchTone,
++    /// Tag 26, `41 87` sub-id 1.
++    pub low_battery_prompt: D1203LowBatteryPrompt,
++    /// Tag 26, `41 87` sub-id 3.
++    pub wearing_tone: D1203WearingTone,
++    /// Tag 27, `41 88` sub-id 2.
++    pub ldac: D1203Ldac,
++    /// Tag 27, `41 88` sub-id 14.
++    pub easy_chat: D1203EasyChat,
++    /// Tag 44 byte 0.
++    pub dual_connections: D1203DualConnections,
++    /// Tag 27, `41 88` sub-id 29.
++    pub soundstage: D1203Soundstage,
++    /// Whether tag 27 is long enough to carry sub-id 29.
++    pub soundstage_supported: D1203SoundstageSupported,
++    /// Tag 25.
++    pub auto_power_off: D1203AutoPowerOff,
+ }
+ 
+ impl FromPacketBody for D1203StateUpdatePacket {
+@@ -225,11 +238,11 @@ impl FromPacketBody for D1203StateUpdatePacket {
+             // 6 byte prefix
+             let (mut input, _prefix) = take(PREFIX.len())(input)?;
+ 
+-            let mut dual_battery = DualBattery::default();
++            let mut packet = Self::default();
+             let mut firmware_left: Option<FirmwareVersion> = None;
+             let mut firmware_right: Option<FirmwareVersion> = None;
+             let mut serial_number: Option<SerialNumber> = None;
+-            let mut preset_equalizer = D1203PresetEqualizer::default();
++            let mut sound_mode_byte5: Option<u8> = None;
+ 
+             // Iterate TLV fields until the input is consumed. Be tolerant:
+             // unknown tags are skipped, and a value we can't decode (e.g. an
+@@ -245,7 +258,7 @@ impl FromPacketBody for D1203StateUpdatePacket {
+                     TAG_BATTERY_LEFT => {
+                         // [charging_flag, battery_level] where level is 0-100.
+                         if value.len() >= 2 {
+-                            dual_battery.left = SingleBattery {
++                            packet.dual_battery.left = SingleBattery {
+                                 is_charging: IsBatteryCharging::from(value[0] != 0),
+                                 level: BatteryLevel(value[1]),
+                             };
+@@ -253,12 +266,17 @@ impl FromPacketBody for D1203StateUpdatePacket {
+                     }
+                     TAG_BATTERY_RIGHT => {
+                         if value.len() >= 2 {
+-                            dual_battery.right = SingleBattery {
++                            packet.dual_battery.right = SingleBattery {
+                                 is_charging: IsBatteryCharging::from(value[0] != 0),
+                                 level: BatteryLevel(value[1]),
+                             };
+                         }
+                     }
++                    TAG_CASE_BATTERY => {
++                        if let Some(&level) = value.get(1) {
++                            packet.case_battery_level = CaseBatteryLevel(BatteryLevel(level));
++                        }
++                    }
+                     TAG_FIRMWARE_LEFT => {
+                         if let Ok((_, firmware)) = FirmwareVersion::take::<E>(value) {
+                             firmware_left = Some(firmware);
+@@ -281,7 +299,71 @@ impl FromPacketBody for D1203StateUpdatePacket {
+                     TAG_EQ_PRESET => {
+                         // [preset_id, second_byte]; Custom is [0xFE, 0xFE].
+                         if let Some(preset) = D1203PresetEqualizer::from_tag_value(value) {
+-                            preset_equalizer = preset;
++                            packet.preset_equalizer = preset;
++                        }
++                    }
++                    tag if (TAG_BUTTON_FIRST..TAG_BUTTON_FIRST + 8).contains(&tag) => {
++                        let button = D1203Button::ALL[usize::from(tag - TAG_BUTTON_FIRST)];
++                        if let Some(action) =
++                            value.first().copied().and_then(D1203ButtonAction::from_repr)
++                        {
++                            packet.button_configuration.set_action(button, action);
++                        }
++                    }
++                    TAG_AUTO_POWER_OFF => {
++                        if let Some(auto_power_off) = auto_power_off_from_wire(value) {
++                            packet.auto_power_off = auto_power_off;
++                        }
++                    }
++                    TAG_TOGGLES_41_87 => {
++                        if let Some(v) = bit(value, SUB_TOUCH_TONE) {
++                            packet.touch_tone = v.into();
++                        }
++                        if let Some(v) = bit(value, SUB_LOW_BATTERY_PROMPT) {
++                            packet.low_battery_prompt = v.into();
++                        }
++                        if let Some(v) = bit(value, SUB_WEARING_TONE) {
++                            packet.wearing_tone = v.into();
++                        }
++                    }
++                    TAG_TOGGLES_41_88 => {
++                        if let Some(v) = bit(value, SUB_LDAC) {
++                            packet.ldac = v.into();
++                        }
++                        if let Some(v) = bit(value, SUB_WIND_NOISE) {
++                            packet.wind_noise = D1203WindNoise(v);
++                        }
++                        if let Some(v) = bit(value, SUB_EASY_CHAT) {
++                            packet.easy_chat = v.into();
++                        }
++                        if let Some(v) = bit(value, SUB_SOUNDSTAGE) {
++                            packet.soundstage = v.into();
++                            packet.soundstage_supported = true.into();
++                        }
++                    }
++                    TAG_SOUND_MODE => {
++                        if let Some(mode) =
++                            value.first().copied().and_then(D1203AmbientSoundMode::from_repr)
++                        {
++                            packet.ambient_sound_mode = mode;
++                        }
++                        if let Some(mode) =
++                            value.get(1).copied().and_then(D1203NoiseCancelingMode::from_repr)
++                        {
++                            packet.nc_mode = mode;
++                        }
++                    }
++                    TAG_MANUAL_NOISE_CANCELING => {
++                        if let Some(&level) = value.first() {
++                            packet.manual_nc_level = D1203ManualNoiseCanceling::new(level);
++                        }
++                    }
++                    TAG_SOUND_MODE_BYTE5 => {
++                        sound_mode_byte5 = value.first().copied();
++                    }
++                    TAG_DUAL_CONNECTIONS => {
++                        if let Some(&enabled) = value.first() {
++                            packet.dual_connections = (enabled != 0).into();
+                         }
+                     }
+                     _ => {
+@@ -290,47 +372,23 @@ impl FromPacketBody for D1203StateUpdatePacket {
+                 }
+             }
+ 
+-            let dual_firmware_version = match (firmware_left, firmware_right) {
++            // byte5 only names the transport type inside Transportation; in
++            // every other sub-mode it is the active flag.
++            if packet.nc_mode == D1203NoiseCancelingMode::Transportation {
++                if let Some(mode) = sound_mode_byte5.and_then(D1203TransportationMode::from_repr) {
++                    packet.transportation_mode = mode;
++                }
++            }
++
++            packet.dual_firmware_version = match (firmware_left, firmware_right) {
+                 (Some(left), Some(right)) => DualFirmwareVersion::Both { left, right },
+                 (Some(left), None) => DualFirmwareVersion::LeftOnly(left),
+                 (None, Some(right)) => DualFirmwareVersion::RightOnly(right),
+                 (None, None) => DualFirmwareVersion::default(),
+             };
++            packet.serial_number = serial_number.unwrap_or_default();
+ 
+-            Ok((
+-                input,
+-                Self {
+-                    dual_battery,
+-                    dual_firmware_version,
+-                    serial_number: serial_number.unwrap_or_default(),
+-                    preset_equalizer,
+-                    // TODO: decode the real ambient sound mode once its TLV
+-                    // tag is known. Defaulting here means the state reads as
+-                    // the default mode; writing is unaffected.
+-                    ambient_sound_mode: Default::default(),
+-                    // TODO: decode the NC sub-mode and manual level once their
+-                    // TLV tags are known. Defaulting here; writing is
+-                    // unaffected.
+-                    nc_mode: Default::default(),
+-                    manual_nc_level: Default::default(),
+-                    // TODO: decode the transport type once its TLV tag is
+-                    // known. Defaulting here (Airplane); writing is unaffected.
+-                    transportation_mode: Default::default(),
+-                    // TODO: decode the wind-noise state once its TLV tag is
+-                    // known. Defaulting here (OFF); writing is unaffected.
+-                    wind_noise: Default::default(),
+-                    // TODO: decode the miscellaneous toggles / auto power off
+-                    // once their TLV tags are known. Defaulting here; writing
+-                    // is unaffected (each uses its own dedicated command).
+-                    touch_tone: Default::default(),
+-                    low_battery_prompt: Default::default(),
+-                    wearing_tone: Default::default(),
+-                    ldac: Default::default(),
+-                    easy_chat: Default::default(),
+-                    soundstage: Default::default(),
+-                    auto_power_off: Default::default(),
+-                },
+-            ))
++            Ok((input, packet))
+         })
+         .parse_complete(input)
+     }
+@@ -343,10 +401,8 @@ impl ToPacket for D1203StateUpdatePacket {
+         packet::inbound::STATE_COMMAND
+     }
+ 
+-    /// Best-effort TLV serialization. Reconstructs a minimal but
+-    /// parser-compatible body: the 6 byte prefix, then the firmware (tags 5/6)
+-    /// and serial number (tag 7) TLV fields. This is enough for the demo device
+-    /// to round-trip the fields Phase 1 decodes.
++    /// Best-effort TLV serialization of every field the parser decodes, in the
++    /// device's tag layout. Used by the demo device and round-trip tests.
+     fn body(&self) -> Vec<u8> {
+         let mut body: Vec<u8> = PREFIX.to_vec();
+ 
+@@ -361,6 +417,8 @@ impl ToPacket for D1203StateUpdatePacket {
+         body.push(self.dual_battery.right.is_charging as u8);
+         body.push(self.dual_battery.right.level.0);
+ 
++        body.extend([TAG_CASE_BATTERY, 2, 0, self.case_battery_level.0.0]);
++
+         if let Some(left) = self.dual_firmware_version.left() {
+             body.push(TAG_FIRMWARE_LEFT);
+             body.push(5);
+@@ -386,6 +444,43 @@ impl ToPacket for D1203StateUpdatePacket {
+         body.push(2);
+         body.extend(self.preset_equalizer.to_tag_value());
+ 
++        for (index, button) in D1203Button::ALL.into_iter().enumerate() {
++            let action = self.button_configuration.action(button);
++            body.push(TAG_BUTTON_FIRST + index as u8);
++            body.push(2);
++            body.push(action.byte());
++            body.push(button.payload(action)[3]);
++        }
++
++        let (enabled, duration_idx) = self.auto_power_off.to_wire();
++        body.extend([TAG_AUTO_POWER_OFF, 2, enabled as u8, duration_idx]);
++
++        let mut toggles_41_87 = [0u8; 1];
++        set_bit(&mut toggles_41_87, SUB_TOUCH_TONE, self.touch_tone.0);
++        set_bit(&mut toggles_41_87, SUB_LOW_BATTERY_PROMPT, self.low_battery_prompt.0);
++        set_bit(&mut toggles_41_87, SUB_WEARING_TONE, self.wearing_tone.0);
++        body.extend([TAG_TOGGLES_41_87, 1, toggles_41_87[0]]);
++
++        let mut toggles_41_88 = [0u8; 4];
++        set_bit(&mut toggles_41_88, SUB_LDAC, self.ldac.0);
++        set_bit(&mut toggles_41_88, SUB_WIND_NOISE, self.wind_noise.0);
++        set_bit(&mut toggles_41_88, SUB_EASY_CHAT, self.easy_chat.0);
++        set_bit(&mut toggles_41_88, SUB_SOUNDSTAGE, self.soundstage.0);
++        let toggles_41_88_len = if self.soundstage_supported.0 { 4 } else { 3 };
++        body.extend([TAG_TOGGLES_41_88, toggles_41_88_len as u8]);
++        body.extend(&toggles_41_88[..toggles_41_88_len]);
++
++        let sound_mode = build_sound_mode_payload(
++            self.ambient_sound_mode,
++            self.nc_mode,
++            self.manual_nc_level,
++            self.transportation_mode,
++        );
++        body.extend([TAG_SOUND_MODE, 3, sound_mode[0], sound_mode[1], sound_mode[2]]);
++        body.extend([TAG_MANUAL_NOISE_CANCELING, 2, sound_mode[3], 1]);
++        body.extend([TAG_SOUND_MODE_BYTE5, 2, sound_mode[5], 0]);
++        body.extend([TAG_DUAL_CONNECTIONS, 3, self.dual_connections.0.into(), 2, 0]);
++
+         body
+     }
+ }
+@@ -400,6 +495,53 @@ mod tests {
+ 
+     use super::*;
+ 
++    fn parse(body: Vec<u8>) -> D1203StateUpdatePacket {
++        let packet = packet::Inbound::new(packet::inbound::STATE_COMMAND, body);
++        let bytes = packet.bytes_with_checksum();
++        let (_, inbound) = packet::Inbound::take_with_checksum::<VerboseError<_>>(&bytes).unwrap();
++        inbound.try_to_packet().unwrap()
++    }
++
++    /// State body captured from a real Liberty 5 Pro on firmware 05.33, with
++    /// the user's own settings: Normal mode, manual NC level 5, touch tone and
++    /// low battery prompt on, wearing tone off, LDAC off, Easy Chat on, dual
++    /// connections on, auto power off 30 minutes, and buttons L single = None,
++    /// R single = None, L double = Next Track, R double = Play/Pause,
++    /// triple = None, long = Ambient Sound.
++    fn firmware_0533_state_body() -> Vec<u8> {
++        let mut body: Vec<u8> = vec![
++            1, 1, 1, 2, 1, 1, // prefix
++            3, 2, 0, 92, // battery left
++            4, 2, 0, 93, // battery right
++            5, 5, 48, 53, 46, 51, 51, // firmware left "05.33"
++            6, 5, 48, 53, 46, 51, 51, // firmware right "05.33"
++            7, 17, 49, 50, 48, 51, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 0, // serial (anonymized)
++            8, 2, 0, 1, //
++            9, 5, 48, 49, 46, 52, 54, //
++            10, 1, 49, //
++            11, 2, 0, 0, //
++            12, 32,
++        ];
++        body.extend(std::iter::repeat_n(0, 32));
++        body.extend_from_slice(&[
++            13, 2, 15, 15, 15, 2, 3, 6, 17, 2, 15, 15, 19, 2, 4, 4, 21, 2, 0, 0, 23, 2, 1, 1, 14,
++            2, 15, 15, 16, 2, 6, 6, 18, 2, 15, 15, 20, 2, 4, 4, 22, 2, 0, 0, 24, 2, 1, 1, //
++            25, 2, 1, 2, //
++            42, 1, 1, //
++            26, 1, 247, //
++            27, 3, 8, 65, 2, //
++            28, 1, 1, //
++            35, 92,
++        ]);
++        body.extend(std::iter::repeat_n(0, 92));
++        body.extend_from_slice(&[
++            36, 3, 2, 0, 0, 37, 2, 5, 1, 38, 2, 0, 0, 39, 3, 0, 90, 0, 41, 6, 0, 0, 0, 0, 0,
++            0, 44, 3, 1, 2, 0, 46, 1, 99, 48, 1, 2, 49, 1, 0, 50, 2, 0, 0, 51, 6, 0, 0, 0, 0, 0,
++            0, 52, 1, 0, 53, 1, 255, 54, 2, 1, 0, 68, 1, 0,
++        ]);
++        body
++    }
++
+     #[test]
+     fn serialize_and_deserialize() {
+         let bytes = D1203StateUpdatePacket::default()
+@@ -410,6 +552,91 @@ mod tests {
+         assert_eq!(parsed, D1203StateUpdatePacket::default());
+     }
+ 
++    #[test]
++    fn real_packet_round_trips() {
++        let parsed = parse(firmware_0533_state_body());
++        assert_eq!(parse(parsed.body()), parsed);
++    }
++
++    #[test]
++    fn parses_settings_from_firmware_0533_packet() {
++        use D1203Button::*;
++        use D1203ButtonAction::*;
++
++        let parsed = parse(firmware_0533_state_body());
++        assert_eq!(parsed.ambient_sound_mode, D1203AmbientSoundMode::Normal);
++        assert_eq!(parsed.nc_mode, D1203NoiseCancelingMode::Manual);
++        assert_eq!(parsed.manual_nc_level, D1203ManualNoiseCanceling(5));
++        assert_eq!(parsed.transportation_mode, D1203TransportationMode::Airplane);
++        assert_eq!(parsed.touch_tone, D1203TouchTone(true));
++        assert_eq!(parsed.low_battery_prompt, D1203LowBatteryPrompt(true));
++        assert_eq!(parsed.wearing_tone, D1203WearingTone(false));
++        assert_eq!(parsed.ldac, D1203Ldac(false));
++        assert_eq!(parsed.wind_noise, D1203WindNoise(false));
++        assert_eq!(parsed.easy_chat, D1203EasyChat(true));
++        assert_eq!(parsed.dual_connections, D1203DualConnections(true));
++        assert_eq!(parsed.soundstage_supported, D1203SoundstageSupported(false));
++        assert_eq!(parsed.auto_power_off, D1203AutoPowerOff::ThirtyMinutes);
++
++        let buttons = parsed.button_configuration;
++        assert_eq!(buttons.action(LeftSinglePress), None);
++        assert_eq!(buttons.action(RightSinglePress), None);
++        assert_eq!(buttons.action(LeftDoublePress), NextTrack);
++        assert_eq!(buttons.action(RightDoublePress), PlayPause);
++        assert_eq!(buttons.action(LeftTriplePress), None);
++        assert_eq!(buttons.action(RightTriplePress), None);
++        assert_eq!(buttons.action(LeftLongPress), AmbientSound);
++        assert_eq!(buttons.action(RightLongPress), AmbientSound);
++    }
++
++    /// Values observed while writing known settings on firmware 05.33.
++    #[test]
++    fn parses_observed_sound_mode_and_toggle_changes() {
++        fn with(tags: &[u8]) -> D1203StateUpdatePacket {
++            let mut body = PREFIX.to_vec();
++            body.extend_from_slice(tags);
++            parse(body)
++        }
++
++        // NC, Transportation, Car: tag 36 = [0, 2, 0], tag 38 = [1, 0]
++        let parsed = with(&[36, 3, 0, 2, 0, 37, 2, 3, 1, 38, 2, 1, 0]);
++        assert_eq!(parsed.ambient_sound_mode, D1203AmbientSoundMode::NoiseCanceling);
++        assert_eq!(parsed.nc_mode, D1203NoiseCancelingMode::Transportation);
++        assert_eq!(parsed.manual_nc_level, D1203ManualNoiseCanceling(3));
++        assert_eq!(parsed.transportation_mode, D1203TransportationMode::Car);
++
++        // Manual NC: byte5 is the active flag, not a transport type
++        let parsed = with(&[36, 3, 0, 0, 0, 38, 2, 1, 0]);
++        assert_eq!(parsed.transportation_mode, D1203TransportationMode::Airplane);
++
++        // wind noise on (sub 11) and LDAC on (sub 2), which turns dual
++        // connections off
++        let parsed = with(&[27, 3, 12, 73, 0, 44, 3, 0, 2, 0]);
++        assert_eq!(parsed.wind_noise, D1203WindNoise(true));
++        assert_eq!(parsed.ldac, D1203Ldac(true));
++        assert_eq!(parsed.dual_connections, D1203DualConnections(false));
++
++        // case battery after docking the earbuds
++        assert_eq!(
++            with(&[8, 2, 0, 70]).case_battery_level,
++            CaseBatteryLevel(BatteryLevel(70))
++        );
++
++        // auto power off
++        assert_eq!(with(&[25, 2, 1, 0]).auto_power_off, D1203AutoPowerOff::TenMinutes);
++        assert_eq!(with(&[25, 2, 1, 3]).auto_power_off, D1203AutoPowerOff::SixtyMinutes);
++        assert_eq!(with(&[25, 2, 0, 0]).auto_power_off, D1203AutoPowerOff::Never);
++    }
++
++    #[test]
++    fn soundstage_is_supported_only_with_a_four_byte_tag_27() {
++        let mut body = PREFIX.to_vec();
++        body.extend_from_slice(&[27, 4, 8, 73, 16, 32]);
++        let parsed = parse(body);
++        assert_eq!(parsed.soundstage_supported, D1203SoundstageSupported(true));
++        assert_eq!(parsed.soundstage, D1203Soundstage(true));
++    }
++
+     #[test]
+     fn preset_tag_value_mapping() {
+         use D1203PresetEqualizer::*;
+@@ -444,10 +671,7 @@ mod tests {
+         // Minimal TLV body: 6 byte prefix + tag 11 = Bass Booster.
+         let mut body: Vec<u8> = PREFIX.to_vec();
+         body.extend_from_slice(&[TAG_EQ_PRESET, 2, 2, 0]);
+-        let packet = packet::Inbound::new(packet::inbound::STATE_COMMAND, body);
+-        let bytes = packet.bytes_with_checksum();
+-        let (_, inbound) = packet::Inbound::take_with_checksum::<VerboseError<_>>(&bytes).unwrap();
+-        let parsed: D1203StateUpdatePacket = inbound.try_to_packet().unwrap();
++        let parsed = parse(body);
+         assert_eq!(parsed.preset_equalizer, D1203PresetEqualizer::BassBooster);
+     }
+ }
+diff --git a/lib/src/devices/soundcore/d1203/state.rs b/lib/src/devices/soundcore/d1203/state.rs
+index 7c1ecfa..e078e6e 100644
+--- a/lib/src/devices/soundcore/d1203/state.rs
++++ b/lib/src/devices/soundcore/d1203/state.rs
+@@ -4,18 +4,22 @@ use crate::devices::soundcore::{
+     d1203::{
+         modules::{
+             D1203AmbientSoundMode, D1203AutoPowerOff, D1203ButtonConfiguration,
+-            D1203CustomEqualizer, D1203EasyChat, D1203Ldac, D1203LowBatteryPrompt,
+-            D1203ManualNoiseCanceling, D1203NoiseCancelingMode, D1203Soundstage, D1203TouchTone,
+-            D1203TransportationMode, D1203WearingTone, D1203WindNoise,
++            D1203CustomEqualizer, D1203DualConnections, D1203EasyChat, D1203Ldac,
++            D1203LowBatteryPrompt, D1203ManualNoiseCanceling, D1203NoiseCancelingMode,
++            D1203Soundstage, D1203SoundstageSupported, D1203TouchTone, D1203TransportationMode,
++            D1203WearingTone, D1203WindNoise,
+         },
+         packets::inbound::{D1203PresetEqualizer, D1203StateUpdatePacket},
+     },
+-    common::structures::{DualBattery, DualFirmwareVersion, SerialNumber},
++    common::structures::{CaseBatteryLevel, DualBattery, DualFirmwareVersion, SerialNumber},
+ };
+ 
++/// Everything except the custom EQ is read from the state packet on connect;
++/// see `packets::inbound::state_update` for which tag carries what.
+ #[derive(Debug, Clone, PartialEq, Eq, Has)]
+ pub struct D1203State {
+     dual_battery: DualBattery,
++    case_battery_level: CaseBatteryLevel,
+     dual_firmware_version: DualFirmwareVersion,
+     serial_number: SerialNumber,
+     #[has(skip)]
+@@ -28,88 +32,48 @@ pub struct D1203State {
+     /// the A3957, but the D1203 has a FOURTH mode (`3 = Adaptive`) the A3957
+     /// enum cannot represent, so we use a D1203-specific enum instead of
+     /// reusing `a3957::structures::SoundModes`. See `modules::ambient_sound_mode`.
+-    ///
+-    /// TODO(read): which TLV tag of the D1203 state packet carries the current
+-    /// ambient sound mode is not yet known (a full state capture is pending),
+-    /// so this is initialized to `Default` on connect. Writing works
+-    /// regardless; only reading back the device's *current* mode is a TODO.
+     ambient_sound_mode: D1203AmbientSoundMode,
+     /// Noise-canceling sub-mode (byte 1 of the `06 81` payload): Manual or
+     /// Transportation. Only meaningful when the ambient mode is NoiseCanceling,
+     /// but the device always carries a value here.
+-    ///
+-    /// TODO(read): like `ambient_sound_mode`, the state-packet TLV tag for this
+-    /// is not yet identified, so it is initialized to `Default` (Manual) on
+-    /// connect. Writing works regardless.
+     nc_mode: D1203NoiseCancelingMode,
+     /// Manual ANC level (byte 3 of the `06 81` payload), 1..=5.
+-    ///
+-    /// TODO(read): not yet decoded from the state packet (TLV tag unknown), so
+-    /// initialized to `Default` (level 1) on connect. Writing works regardless.
+     manual_nc_level: D1203ManualNoiseCanceling,
+     /// Transport type (Airplane / Car) that drives byte[5] of the `06 81`
+     /// payload WHILE the NC sub-mode is Transportation. Outside Transportation
+     /// byte[5] is the active flag and this field is ignored; see
+     /// `modules::ambient_sound_mode::build_sound_mode_payload`.
+-    ///
+-    /// TODO(read): the D1203 state packet does not expose the current transport
+-    /// type (no TLV tag identified), so it is initialized to `Default`
+-    /// (Airplane) on connect. Writing works regardless.
+     transportation_mode: D1203TransportationMode,
+     /// Wind noise reduction toggle. Driven by its OWN dedicated command
+     /// (`Command([0x41, 0x88])`, payload `[0x0b, 0|1]`), NOT the `06 81`
+     /// sound-mode command. See `modules::wind_noise`.
+-    ///
+-    /// TODO(read): the state-packet TLV tag carrying this is not yet
+-    /// identified, so it is initialized to `Default` (OFF) on connect. Writing
+-    /// works regardless.
+     wind_noise: D1203WindNoise,
+     /// Current action of each of the eight configurable buttons (2 sides x 4
+     /// gestures). Driven by the `04 8c` command, one packet per changed gesture.
+     /// See `modules::button_configuration`.
+-    ///
+-    /// TODO(read): the D1203 state packet does not expose button configuration
+-    /// in any known form (state read-back for the D1203 has been investigated
+-    /// and is infeasible for most fields), so this is initialized to `Default`
+-    /// (every button = PlayPause) on connect. Writing works regardless.
+     button_configuration: D1203ButtonConfiguration,
+     /// Touch Tone prompt toggle. Driven by command `41 87` sub-id 0. See
+     /// `modules::misc`.
+-    ///
+-    /// TODO(read): state-packet TLV tag not yet identified; initialized to
+-    /// `Default` (OFF). Writing works regardless.
+     touch_tone: D1203TouchTone,
+     /// Low Battery Prompt toggle. Driven by command `41 87` sub-id 1.
+-    ///
+-    /// TODO(read): state-packet TLV tag not yet identified; initialized to
+-    /// `Default` (OFF). Writing works regardless.
+     low_battery_prompt: D1203LowBatteryPrompt,
+     /// Wearing Tone prompt toggle. Driven by command `41 87` sub-id 3.
+-    ///
+-    /// TODO(read): state-packet TLV tag not yet identified; initialized to
+-    /// `Default` (OFF). Writing works regardless.
+     wearing_tone: D1203WearingTone,
+     /// LDAC high-resolution codec toggle. Driven by command `41 88` sub-id 2.
+-    ///
+-    /// TODO(read): state-packet TLV tag not yet identified; initialized to
+-    /// `Default` (OFF). Writing works regardless.
+     ldac: D1203Ldac,
+     /// Easy Chat toggle. Driven by command `41 88` sub-id 14.
+-    ///
+-    /// TODO(read): state-packet TLV tag not yet identified; initialized to
+-    /// `Default` (OFF). Writing works regardless.
+     easy_chat: D1203EasyChat,
++    /// Dual connections (multipoint) toggle. Driven by command `41 88` sub-id
++    /// 17. The device turns it off by itself when LDAC is turned on.
++    dual_connections: D1203DualConnections,
+     /// Soundstage / Soundfield rendering toggle. Driven by command `41 88`
+     /// sub-id 29. Exposed via `SettingId::SpatialAudio`.
+-    ///
+-    /// TODO(read): state-packet TLV tag not yet identified; initialized to
+-    /// `Default` (OFF). Writing works regardless.
+     soundstage: D1203Soundstage,
++    /// Whether this firmware supports Soundstage at all; the setting is hidden
++    /// when it does not.
++    soundstage_supported: D1203SoundstageSupported,
+     /// Auto power off timeout selector. Driven by command `01 86`, payload
+     /// `[enabled, duration_idx]`. See `modules::misc`.
+-    ///
+-    /// TODO(read): state-packet TLV tag not yet identified; initialized to
+-    /// `Default` (Never). Writing works regardless.
+     auto_power_off: D1203AutoPowerOff,
+ }
+ 
+@@ -125,45 +89,27 @@ impl From<D1203StateUpdatePacket> for D1203State {
+     fn from(value: D1203StateUpdatePacket) -> Self {
+         Self {
+             dual_battery: value.dual_battery,
++            case_battery_level: value.case_battery_level,
+             dual_firmware_version: value.dual_firmware_version,
+             serial_number: value.serial_number,
+             preset_equalizer: value.preset_equalizer,
+             // The device does not report the current custom parametric EQ in
+             // its state packet, so start flat; the value tracks what we write.
+             custom_equalizer: D1203CustomEqualizer::default(),
+-            // TODO: read the real current ambient sound mode from the state
+-            // packet once the TLV tag is identified. For now start at Default;
+-            // writes still apply correctly (the device accepts the 06 81
+-            // command, including value 3 = Adaptive).
+             ambient_sound_mode: value.ambient_sound_mode,
+-            // TODO: read the real NC sub-mode and manual level from the state
+-            // packet once their TLV tags are identified. For now start at
+-            // Default; writes still apply correctly.
+             nc_mode: value.nc_mode,
+             manual_nc_level: value.manual_nc_level,
+-            // TODO: read the real transport type from the state packet once its
+-            // TLV tag is identified. For now start at Default (Airplane); writes
+-            // still apply correctly (byte[5] inside Transportation).
+             transportation_mode: value.transportation_mode,
+-            // TODO: read the real wind-noise state from the state packet once
+-            // its TLV tag is identified. For now start at Default (OFF); writes
+-            // still apply correctly (the device accepts the 41 88 command).
+             wind_noise: value.wind_noise,
+-            // TODO: the D1203 state packet does not expose button configuration
+-            // in any known form, so start at Default (every button = PlayPause)
+-            // on connect; writes still apply correctly (the device accepts the
+-            // 04 8c command, one packet per changed gesture).
+-            button_configuration: D1203ButtonConfiguration::default(),
+-            // TODO: read the real miscellaneous toggle / auto power off state
+-            // from the state packet once their TLV tags are identified. For now
+-            // start at Default; writes still apply correctly (each uses its own
+-            // dedicated command: 41 87 / 41 88 / 01 86).
++            button_configuration: value.button_configuration,
+             touch_tone: value.touch_tone,
+             low_battery_prompt: value.low_battery_prompt,
+             wearing_tone: value.wearing_tone,
+             ldac: value.ldac,
+             easy_chat: value.easy_chat,
++            dual_connections: value.dual_connections,
+             soundstage: value.soundstage,
++            soundstage_supported: value.soundstage_supported,
+             auto_power_off: value.auto_power_off,
+         }
+     }
