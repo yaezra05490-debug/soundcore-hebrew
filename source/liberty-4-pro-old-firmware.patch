@@ -1,0 +1,854 @@
+diff --git a/lib/src/devices/soundcore/a3954.rs b/lib/src/devices/soundcore/a3954.rs
+index 44a92e5f..986665c2 100644
+--- a/lib/src/devices/soundcore/a3954.rs
++++ b/lib/src/devices/soundcore/a3954.rs
+@@ -57,6 +57,7 @@ soundcore_device!(
+             .await;
+ 
+         builder.button_configuration(&BUTTON_CONFIGURATION_SETTINGS);
++        builder.button_configuration(&SLIDE_BUTTON_CONFIGURATION_SETTINGS);
+         builder.ambient_sound_mode_cycle();
+         builder.reset_button_configuration::<packets::inbound::A3954StateUpdatePacket>(
+             RequestState.to_packet(),
+@@ -96,7 +97,7 @@ soundcore_device!(
+     },
+ );
+ 
+-pub const BUTTON_CONFIGURATION_SETTINGS: ButtonConfigurationSettings<12, 6> =
++pub const BUTTON_CONFIGURATION_SETTINGS: ButtonConfigurationSettings<8, 4> =
+     ButtonConfigurationSettings {
+         supports_set_all_packet: false,
+         ignore_enabled_flag: false,
+@@ -111,10 +112,6 @@ pub const BUTTON_CONFIGURATION_SETTINGS: ButtonConfigurationSettings<12, 6> =
+             Button::RightTriplePress,
+             Button::LeftLongPress,
+             Button::RightLongPress,
+-            Button::LeftSlideUp,
+-            Button::RightSlideUp,
+-            Button::LeftSlideDown,
+-            Button::RightSlideDown,
+         ],
+         settings: [
+             ButtonSettings {
+@@ -157,6 +154,24 @@ pub const BUTTON_CONFIGURATION_SETTINGS: ButtonConfigurationSettings<12, 6> =
+                 available_actions: COMMON_ACTIONS,
+                 disable_mode: ButtonDisableMode::IndividualDisable,
+             },
++        ],
++    };
++
++/// Slide button configuration is not present in the state update packet of all firmware versions,
++/// so it is kept separate from the other buttons.
++pub const SLIDE_BUTTON_CONFIGURATION_SETTINGS: ButtonConfigurationSettings<4, 2> =
++    ButtonConfigurationSettings {
++        supports_set_all_packet: false,
++        ignore_enabled_flag: false,
++        set_button_action_command_override: None,
++        setting_id_override: None,
++        order: [
++            Button::LeftSlideUp,
++            Button::RightSlideUp,
++            Button::LeftSlideDown,
++            Button::RightSlideDown,
++        ],
++        settings: [
+             ButtonSettings {
+                 parse_settings: ButtonParseSettings {
+                     enabled_flag_kind: EnabledFlagKind::None,
+@@ -198,13 +213,139 @@ mod tests {
+ 
+     use crate::{
+         DeviceModel,
+-        devices::soundcore::common::{
+-            device::{SoundcoreDeviceConfig, test_utils::TestSoundcoreDevice},
+-            packet,
++        devices::soundcore::{
++            a3954::packets::inbound::fixtures::{FULL_BODY, ISSUE_246_BODY, ISSUE_284_BODY},
++            common::{
++                device::{SoundcoreDeviceConfig, test_utils::TestSoundcoreDevice},
++                packet::{self, outbound::ToPacket},
++                structures::button_configuration::Button,
++            },
+         },
+         settings::{SettingId, Value},
+     };
+ 
++    const SLIDE_SETTINGS: [SettingId; 4] = [
++        SettingId::LeftSlideUp,
++        SettingId::RightSlideUp,
++        SettingId::LeftSlideDown,
++        SettingId::RightSlideDown,
++    ];
++
++    async fn device_with_state_update_body(body: &[u8]) -> TestSoundcoreDevice {
++        TestSoundcoreDevice::new(
++            super::device_registry,
++            DeviceModel::SoundcoreA3954,
++            HashMap::from([(
++                packet::Command([1, 1]),
++                packet::Inbound::new(packet::Command([1, 1]), body.to_vec()),
++            )]),
++            SoundcoreDeviceConfig::default(),
++        )
++        .await
++    }
++
++    #[tokio::test(start_paused = true)]
++    async fn connects_with_packet_without_slide_buttons() {
++        // Left double press is 0x32: PreviousSong when TWS is connected, NextSong when disconnected.
++        // #246 is TWS disconnected, #284 is TWS connected.
++        for (body, left_double_press) in [
++            (&ISSUE_246_BODY, "NextSong"),
++            (&ISSUE_284_BODY, "PreviousSong"),
++        ] {
++            let device = device_with_state_update_body(body).await;
++            device.assert_setting_values([
++                (SettingId::FirmwareVersionLeft, "03.23".into()),
++                (SettingId::FirmwareVersionRight, "03.23".into()),
++                (SettingId::LeftSinglePress, Some("PlayPause").into()),
++                (SettingId::RightSinglePress, Some("PlayPause").into()),
++                (SettingId::LeftDoublePress, Some(left_double_press).into()),
++                (SettingId::RightDoublePress, Some("NextSong").into()),
++                (SettingId::LeftTriplePress, Value::OptionalString(None)),
++                (SettingId::RightTriplePress, Value::OptionalString(None)),
++                (SettingId::LeftLongPress, Some("AmbientSoundMode").into()),
++                (SettingId::RightLongPress, Some("AmbientSoundMode").into()),
++                (SettingId::WearingDetection, true.into()),
++            ]);
++            for setting_id in SLIDE_SETTINGS {
++                assert!(
++                    device.inner().setting(&setting_id).is_none(),
++                    "{setting_id} was not reported by the device",
++                );
++            }
++        }
++        let device = device_with_state_update_body(&ISSUE_284_BODY).await;
++        device.assert_setting_values([
++            (SettingId::BatteryLevelLeft, "100/100".into()),
++            (SettingId::BatteryLevelRight, "99/100".into()),
++            (SettingId::CaseFirmwareVersion, "01.56".into()),
++            (SettingId::AutoPowerOff, "30m".into()),
++        ]);
++    }
++
++    #[tokio::test(start_paused = true)]
++    async fn setting_unreported_slide_buttons_fails_without_sending_packets() {
++        let mut device = device_with_state_update_body(&ISSUE_284_BODY).await;
++        for setting_id in SLIDE_SETTINGS {
++            device
++                .assert_set_settings_fails_without_sending_packets(vec![(
++                    setting_id,
++                    Value::OptionalString(None),
++                )])
++                .await;
++        }
++        // The whole batch should fail, including the valid change
++        device
++            .assert_set_settings_fails_without_sending_packets(vec![
++                (SettingId::LeftSinglePress, Some("NextSong").into()),
++                (SettingId::LeftSlideUp, Some("VolumeUp").into()),
++            ])
++            .await;
++        device.assert_setting_values([(SettingId::LeftSinglePress, Some("PlayPause").into())]);
++    }
++
++    #[tokio::test(start_paused = true)]
++    async fn setting_button_without_slide_buttons_sends_only_that_button() {
++        let mut device = device_with_state_update_body(&ISSUE_284_BODY).await;
++        device
++            .assert_set_settings_response(
++                vec![(SettingId::LeftSinglePress, Some("NextSong").into())],
++                vec![
++                    packet::outbound::SetButtonConfiguration {
++                        command_override: None,
++                        button_id: 2,
++                        side: Button::LeftSinglePress.side(),
++                        action_id: 0x63,
++                    }
++                    .to_packet(),
++                ],
++            )
++            .await;
++        device.assert_setting_values([(SettingId::LeftSinglePress, Some("NextSong").into())]);
++    }
++
++    #[tokio::test(start_paused = true)]
++    async fn setting_slide_button_sends_packet() {
++        let mut device = device_with_state_update_body(&FULL_BODY).await;
++        device
++            .assert_set_settings_response(
++                vec![(SettingId::RightSlideDown, Value::OptionalString(None))],
++                vec![
++                    packet::outbound::SetButtonConfiguration {
++                        command_override: None,
++                        button_id: 7,
++                        side: Button::RightSlideDown.side(),
++                        action_id: 0x1F,
++                    }
++                    .to_packet(),
++                ],
++            )
++            .await;
++        device.assert_setting_values([
++            (SettingId::RightSlideDown, Value::OptionalString(None)),
++            (SettingId::LeftSlideDown, Some("VolumeDown").into()),
++        ]);
++    }
++
+     #[tokio::test(start_paused = true)]
+     async fn parses_known_packet() {
+         let device = TestSoundcoreDevice::new(
+diff --git a/lib/src/devices/soundcore/a3954/packets/inbound/state_update.rs b/lib/src/devices/soundcore/a3954/packets/inbound/state_update.rs
+index 989d7db0..a15f09ef 100644
+--- a/lib/src/devices/soundcore/a3954/packets/inbound/state_update.rs
++++ b/lib/src/devices/soundcore/a3954/packets/inbound/state_update.rs
+@@ -1,6 +1,3 @@
+-use std::array;
+-
+-use itertools::Itertools;
+ use nom::{
+     IResult, Parser,
+     bytes::complete::take,
+@@ -32,7 +29,10 @@ pub struct A3954StateUpdatePacket {
+     pub case_serial_number: a3954::structures::CaseSerialNumber,
+     pub equalizer_configuration: CommonEqualizerConfiguration<2, 10>,
+     pub hear_id: CustomHearId<2, 10>,
+-    pub button_configuration: ButtonStatusCollection<12>,
++    pub button_configuration: ButtonStatusCollection<8>,
++    /// Not included in the state update packet by some firmware versions. None means it was not
++    /// reported, not that it is disabled.
++    pub slide_button_configuration: Option<ButtonStatusCollection<4>>,
+     pub ambient_sound_mode_cycle: AmbientSoundModeCycle,
+     pub sound_modes: a3954::structures::SoundModes,
+     pub case_features: a3954::structures::CaseFeatures,
+@@ -61,6 +61,9 @@ impl Default for A3954StateUpdatePacket {
+             equalizer_configuration: Default::default(),
+             hear_id: Default::default(),
+             button_configuration: a3954::BUTTON_CONFIGURATION_SETTINGS.default_status_collection(),
++            slide_button_configuration: Some(
++                a3954::SLIDE_BUTTON_CONFIGURATION_SETTINGS.default_status_collection(),
++            ),
+             ambient_sound_mode_cycle: Default::default(),
+             sound_modes: Default::default(),
+             case_features: Default::default(),
+@@ -86,7 +89,6 @@ impl FromPacketBody for A3954StateUpdatePacket {
+     fn take<'a, E: ParseError<&'a [u8]> + ContextError<&'a [u8]>>(
+         input: &'a [u8],
+     ) -> IResult<&'a [u8], Self, E> {
+-        let button_parse_settings = a3954::BUTTON_CONFIGURATION_SETTINGS.parse_settings();
+         context(
+             "a3954 state update packet",
+             map(
+@@ -104,9 +106,9 @@ impl FromPacketBody for A3954StateUpdatePacket {
+                         CustomHearId::take_with_music_genre_at_end,
+                         take(1usize), // unknown
+                         // The non-slide buttons and slide buttons are not together, so we have to split up parsing
+-                        ButtonStatusCollection::<8>::take(array::from_fn::<_, 8, _>(|i| {
+-                            button_parse_settings[i]
+-                        })),
++                        ButtonStatusCollection::<8>::take(
++                            a3954::BUTTON_CONFIGURATION_SETTINGS.parse_settings(),
++                        ),
+                         AmbientSoundModeCycle::take,
+                         a3954::structures::SoundModes::take,
+                         take(3usize), // unknown
+@@ -129,9 +131,7 @@ impl FromPacketBody for A3954StateUpdatePacket {
+                         a3954::structures::EasyChatWaitTime::take,
+                         WearingDetection::take,
+                         take(1usize), // unknown
+-                        ButtonStatusCollection::<4>::take(array::from_fn::<_, 4, _>(|i| {
+-                            button_parse_settings[8 + i]
+-                        })),
++                        take_slide_button_configuration,
+                     ),
+                 ),
+                 |(
+@@ -170,7 +170,7 @@ impl FromPacketBody for A3954StateUpdatePacket {
+                         easy_chat_wait_time,
+                         wearing_detection,
+                         _unknown7,
+-                        slide_buttons,
++                        slide_button_configuration,
+                     ),
+                 )| Self {
+                     tws_status,
+@@ -182,14 +182,8 @@ impl FromPacketBody for A3954StateUpdatePacket {
+                     case_serial_number,
+                     equalizer_configuration,
+                     hear_id,
+-                    button_configuration: ButtonStatusCollection(
+-                        main_buttons
+-                            .0
+-                            .into_iter()
+-                            .chain(slide_buttons.0)
+-                            .collect_array::<12>()
+-                            .expect("we took size 8 and 4, so if that succeeded, we have 12"),
+-                    ),
++                    button_configuration: main_buttons,
++                    slide_button_configuration,
+                     ambient_sound_mode_cycle,
+                     sound_modes,
+                     case_features,
+@@ -214,6 +208,27 @@ impl FromPacketBody for A3954StateUpdatePacket {
+     }
+ }
+ 
++/// Older firmware versions end the packet before the slide button configuration. If there are no
++/// bytes left, it was not reported. If there are some bytes left, all of it must be present, since
++/// a partial slide button configuration is a truncated packet rather than an older format.
++fn take_slide_button_configuration<'a, E: ParseError<&'a [u8]> + ContextError<&'a [u8]>>(
++    input: &'a [u8],
++) -> IResult<&'a [u8], Option<ButtonStatusCollection<4>>, E> {
++    if input.is_empty() {
++        return Ok((input, None));
++    }
++    context(
++        "a3954 slide button configuration",
++        map(
++            ButtonStatusCollection::<4>::take(
++                a3954::SLIDE_BUTTON_CONFIGURATION_SETTINGS.parse_settings(),
++            ),
++            Some,
++        ),
++    )
++    .parse_complete(input)
++}
++
+ impl ToPacket for A3954StateUpdatePacket {
+     type DirectionMarker = packet::InboundMarker;
+ 
+@@ -237,8 +252,7 @@ impl ToPacket for A3954StateUpdatePacket {
+             .chain(std::iter::once(0)) // unknown
+             .chain(
+                 self.button_configuration
+-                    .bytes(a3954::BUTTON_CONFIGURATION_SETTINGS.parse_settings())
+-                    .take(8),
++                    .bytes(a3954::BUTTON_CONFIGURATION_SETTINGS.parse_settings()),
+             )
+             .chain(self.ambient_sound_mode_cycle.bytes())
+             .chain(self.sound_modes.bytes())
+@@ -260,13 +274,293 @@ impl ToPacket for A3954StateUpdatePacket {
+             .chain(self.easy_chat.wait_time.bytes())
+             .chain(self.wearing_detection.bytes())
+             .chain(std::iter::once(0)) // unknown
+-            .chain(
+-                self.button_configuration
+-                    .bytes(a3954::BUTTON_CONFIGURATION_SETTINGS.parse_settings())
+-                    .skip(8),
+-            )
++            .chain(self.slide_button_configuration.iter().flat_map(|buttons| {
++                buttons.bytes(a3954::SLIDE_BUTTON_CONFIGURATION_SETTINGS.parse_settings())
++            }))
+             .collect()
+     }
+ }
+ 
+ state_update_packet_module!(A3954State, A3954StateUpdatePacket);
++
++#[cfg(test)]
++pub mod fixtures {
++    // Liberty 4 Pro, firmware 03.23/03.23, case firmware 02.56. No slide button configuration.
++    // Source: https://github.com/Oppzippy/OpenSCQ30/issues/246, with the serial numbers (bytes
++    // 16..32 and 38..44) replaced.
++    pub const ISSUE_246_BODY: [u8; 161] = [
++        1, 0, 100, 97, 0, 0, 48, 51, 46, 50, 51, 48, 51, 46, 50, 51, 51, 57, 53, 52, 48, 48, 48,
++        48, 48, 48, 48, 48, 48, 48, 48, 49, 48, 50, 46, 53, 54, 7, 0, 0, 0, 0, 0, 1, 0, 0, 120,
++        120, 120, 120, 120, 120, 120, 120, 120, 120, 255, 255, 255, 255, 255, 255, 255, 255, 255,
++        255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 102, 102, 50, 51, 255,
++        255, 68, 68, 51, 2, 6, 0, 0, 0, 0, 255, 0, 0, 0, 0, 91, 1, 49, 1, 1, 0, 1, 1, 2, 0, 90, 0,
++        0, 0, 0, 0, 0, 0, 49, 1, 0, 1, 0, 1, 255,
++    ];
++
++    // Liberty 4 Pro, firmware 03.23/03.23, case firmware 01.56. No slide button configuration.
++    // Source: https://github.com/Oppzippy/OpenSCQ30/issues/284, with the serial numbers (bytes
++    // 16..32 and 38..44) replaced.
++    pub const ISSUE_284_BODY: [u8; 161] = [
++        1, 1, 100, 99, 0, 0, 48, 51, 46, 50, 51, 48, 51, 46, 50, 51, 51, 57, 53, 52, 48, 48, 48,
++        48, 48, 48, 48, 48, 48, 48, 48, 50, 48, 49, 46, 53, 54, 9, 0, 0, 0, 0, 0, 2, 4, 0, 150,
++        150, 100, 100, 120, 140, 150, 160, 120, 120, 255, 255, 255, 255, 255, 255, 255, 255, 255,
++        255, 0, 0, 254, 254, 254, 254, 254, 254, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 102, 102, 50,
++        51, 255, 255, 68, 68, 51, 2, 6, 0, 2, 1, 1, 255, 0, 0, 0, 0, 99, 1, 50, 1, 1, 0, 1, 1, 2,
++        0, 90, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 1, 0, 1, 255,
++    ];
++
++    // Firmware 03.29/03.29, case firmware 02.58. Includes slide button configuration. Same packet as
++    // a3954::tests::parses_known_packet
++    pub const FULL_BODY: [u8; 165] = [
++        0, 1, 99, 100, 0, 0, 48, 51, 46, 50, 57, 48, 51, 46, 50, 57, 51, 57, 53, 52, 68, 69, 55,
++        55, 53, 49, 56, 65, 57, 68, 70, 52, 48, 50, 46, 53, 56, 9, 244, 157, 138, 83, 43, 186, 254,
++        254, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 255, 255, 255, 255, 255, 255, 255,
++        255, 255, 255, 0, 1, 145, 147, 139, 141, 122, 111, 105, 100, 60, 60, 145, 147, 139, 141,
++        122, 111, 105, 100, 60, 60, 0, 0, 0, 0, 1, 145, 147, 139, 130, 122, 133, 133, 114, 60, 60,
++        145, 147, 139, 130, 122, 133, 133, 114, 60, 60, 0, 0, 10, 102, 102, 50, 51, 255, 255, 68,
++        68, 51, 2, 6, 0, 0, 255, 1, 255, 0, 0, 0, 0, 94, 1, 110, 1, 0, 0, 0, 1, 0, 1, 95, 0, 0, 1,
++        0, 0, 0, 0, 110, 1, 0, 1, 0, 0, 255, 0, 0, 17, 17,
++    ];
++}
++
++#[cfg(test)]
++mod tests {
++    use nom_language::error::VerboseError;
++
++    use openscq30_lib_has::MaybeHas;
++    use tokio::sync::watch;
++
++    use super::{fixtures::*, *};
++    use crate::devices::soundcore::common::{
++        packet::inbound::TryToPacket,
++        packet_manager::PacketHandler,
++        structures::{
++            FirmwareVersion,
++            button_configuration::{ActionStatus, ButtonStatus},
++        },
++    };
++
++    fn parse(body: &[u8]) -> Result<A3954StateUpdatePacket, nom::Err<VerboseError<&[u8]>>> {
++        A3954StateUpdatePacket::take::<VerboseError<_>>(body).map(|(remaining, packet)| {
++            assert!(remaining.is_empty(), "{} bytes remaining", remaining.len());
++            packet
++        })
++    }
++
++    fn try_to_packet(body: &[u8]) -> Result<A3954StateUpdatePacket, ()> {
++        packet::Inbound::new(packet::inbound::STATE_COMMAND, body.to_vec())
++            .try_to_packet()
++            .map_err(|_| ())
++    }
++
++    fn main_button_bytes(packet: &A3954StateUpdatePacket) -> Vec<u8> {
++        packet
++            .button_configuration
++            .bytes(a3954::BUTTON_CONFIGURATION_SETTINGS.parse_settings())
++            .collect()
++    }
++
++    fn slide_button_bytes(packet: &A3954StateUpdatePacket) -> Option<Vec<u8>> {
++        packet.slide_button_configuration.map(|buttons| {
++            buttons
++                .bytes(a3954::SLIDE_BUTTON_CONFIGURATION_SETTINGS.parse_settings())
++                .collect()
++        })
++    }
++
++    #[test]
++    fn parses_161_byte_packet_without_slide_buttons() {
++        for body in [&ISSUE_246_BODY, &ISSUE_284_BODY] {
++            let packet = parse(body).unwrap();
++            assert_eq!(packet.slide_button_configuration, None);
++            assert_eq!(
++                main_button_bytes(&packet),
++                [0x66, 0x66, 0x32, 0x33, 0xFF, 0xFF, 0x44, 0x44],
++            );
++            assert_eq!(packet.battery.left.level.0, body[2]);
++            assert_eq!(packet.battery.right.level.0, body[3]);
++            assert_eq!(
++                packet.firmware_version,
++                DualFirmwareVersion::Both {
++                    left: FirmwareVersion::new(3, 23),
++                    right: FirmwareVersion::new(3, 23),
++                },
++            );
++
++            // Fields in known positions are serialized back to the same place, so this validates
++            // that nothing before the slide buttons was shifted.
++            let serialized = packet.body();
++            assert_eq!(serialized.len(), 161);
++            assert_eq!(serialized[..44], body[..44]);
++            // main buttons
++            assert_eq!(serialized[116..124], body[116..124]);
++            // sound modes
++            assert_eq!(serialized[125..129], body[125..129]);
++            // case language, easy chat wait time, wearing detection
++            assert_eq!(serialized[157..160], body[157..160]);
++        }
++        assert_eq!(
++            parse(&ISSUE_284_BODY)
++                .unwrap()
++                .case_firmware_version
++                .0
++                .to_string(),
++            "01.56",
++        );
++        assert_eq!(
++            parse(&ISSUE_246_BODY)
++                .unwrap()
++                .case_firmware_version
++                .0
++                .to_string(),
++            "02.56",
++        );
++    }
++
++    #[test]
++    fn parses_165_byte_packet_with_slide_buttons() {
++        let packet = parse(&FULL_BODY).unwrap();
++        assert_eq!(
++            slide_button_bytes(&packet),
++            Some(vec![0x00, 0x00, 0x11, 0x11])
++        );
++        assert_eq!(packet.body().len(), 165);
++    }
++
++    #[test]
++    fn parses_non_default_slide_buttons() {
++        // Synthetic: low nibble is the action when TWS is connected, high nibble when disconnected
++        let mut body = FULL_BODY;
++        body[161..].copy_from_slice(&[0xF0, 0x0F, 0x01, 0x1F]);
++        let packet = parse(&body).unwrap();
++        let slide_buttons = packet.slide_button_configuration.unwrap();
++        assert_eq!(
++            slide_buttons.0.map(|status| status.action),
++            [
++                ActionStatus::Tws {
++                    connected: 0x0,
++                    disconnected: 0xF,
++                },
++                ActionStatus::Tws {
++                    connected: 0xF,
++                    disconnected: 0x0,
++                },
++                ActionStatus::Tws {
++                    connected: 0x1,
++                    disconnected: 0x0,
++                },
++                ActionStatus::Tws {
++                    connected: 0xF,
++                    disconnected: 0x1,
++                },
++            ],
++        );
++        assert!(
++            slide_buttons
++                .0
++                .iter()
++                .all(|status: &ButtonStatus| status.enabled.is_none())
++        );
++        assert_eq!(packet.body()[161..], body[161..]);
++    }
++
++    #[test]
++    fn rejects_truncated_packets() {
++        for len in 0..161 {
++            assert!(parse(&FULL_BODY[..len]).is_err(), "length {len}");
++            assert!(try_to_packet(&FULL_BODY[..len]).is_err(), "length {len}");
++        }
++    }
++
++    #[test]
++    fn rejects_partial_slide_buttons() {
++        // TryToPacket discards the remaining input, so make sure a partial slide button
++        // configuration isn't treated as missing.
++        for len in 162..165 {
++            assert!(
++                A3954StateUpdatePacket::take::<VerboseError<_>>(&FULL_BODY[..len]).is_err(),
++                "length {len}",
++            );
++            assert!(try_to_packet(&FULL_BODY[..len]).is_err(), "length {len}");
++        }
++    }
++
++    #[test]
++    fn slide_buttons_are_only_optional_at_the_end() {
++        assert_eq!(
++            try_to_packet(&FULL_BODY[..161])
++                .unwrap()
++                .slide_button_configuration,
++            None,
++        );
++        assert!(
++            try_to_packet(&FULL_BODY)
++                .unwrap()
++                .slide_button_configuration
++                .is_some()
++        );
++
++        let mut body = FULL_BODY.to_vec();
++        body.push(0xAB);
++        let (remaining, packet) = A3954StateUpdatePacket::take::<VerboseError<_>>(&body).unwrap();
++        assert_eq!(remaining, [0xAB]);
++        assert_eq!(
++            slide_button_bytes(&packet),
++            Some(vec![0x00, 0x00, 0x11, 0x11])
++        );
++    }
++
++    #[test]
++    fn serializes_slide_buttons_only_when_present() {
++        let mut packet = A3954StateUpdatePacket::default();
++        assert_eq!(packet.body().len(), 165);
++        packet.slide_button_configuration = None;
++        assert_eq!(packet.body().len(), 161);
++        assert_eq!(
++            parse(&packet.body()).unwrap().slide_button_configuration,
++            None,
++        );
++    }
++
++    fn slide_buttons_in_state(state: &A3954State) -> Option<ButtonStatusCollection<4>> {
++        MaybeHas::<ButtonStatusCollection<4>>::maybe_get(state).copied()
++    }
++
++    #[tokio::test]
++    async fn state_update_packet_handler_updates_slide_buttons() {
++        let (sender, _receiver) =
++            watch::channel(A3954State::new(parse(&FULL_BODY).unwrap(), Vec::new()));
++        let full_slide_buttons = slide_buttons_in_state(&sender.borrow());
++        assert!(full_slide_buttons.is_some());
++
++        let handle = async |body: &[u8]| {
++            StateUpdatePacketHandler
++                .handle_packet(
++                    &sender,
++                    &packet::Inbound::new(packet::inbound::STATE_COMMAND, body.to_vec()),
++                )
++                .await
++        };
++
++        // Some -> None
++        handle(&ISSUE_284_BODY).await.unwrap();
++        assert_eq!(slide_buttons_in_state(&sender.borrow()), None);
++        // None -> None
++        handle(&ISSUE_246_BODY).await.unwrap();
++        assert_eq!(slide_buttons_in_state(&sender.borrow()), None);
++
++        // A rejected packet leaves the state unchanged
++        let before = sender.borrow().clone();
++        assert!(handle(&FULL_BODY[..163]).await.is_err());
++        assert_eq!(*sender.borrow(), before);
++
++        // None -> Some
++        handle(&FULL_BODY).await.unwrap();
++        assert_eq!(slide_buttons_in_state(&sender.borrow()), full_slide_buttons);
++        // Some -> Some
++        handle(&FULL_BODY).await.unwrap();
++        assert_eq!(slide_buttons_in_state(&sender.borrow()), full_slide_buttons);
++    }
++}
+diff --git a/lib/src/devices/soundcore/a3954/state.rs b/lib/src/devices/soundcore/a3954/state.rs
+index 6c90c388..2bb0d031 100644
+--- a/lib/src/devices/soundcore/a3954/state.rs
++++ b/lib/src/devices/soundcore/a3954/state.rs
+@@ -26,7 +26,9 @@ pub struct A3954State {
+     case_serial_number: a3954::structures::CaseSerialNumber,
+     equalizer_configuration: CommonEqualizerConfiguration<2, 10>,
+     hear_id: CustomHearId<2, 10>,
+-    button_configuration: ButtonStatusCollection<12>,
++    button_configuration: ButtonStatusCollection<8>,
++    #[has(maybe)]
++    slide_button_configuration: Option<ButtonStatusCollection<4>>,
+     ambient_sound_mode_cycle: AmbientSoundModeCycle,
+     sound_modes: a3954::structures::SoundModes,
+     case_features: a3954::structures::CaseFeatures,
+@@ -62,6 +64,7 @@ impl A3954State {
+             equalizer_configuration: packet.equalizer_configuration,
+             hear_id: packet.hear_id,
+             button_configuration: packet.button_configuration,
++            slide_button_configuration: packet.slide_button_configuration,
+             ambient_sound_mode_cycle: packet.ambient_sound_mode_cycle,
+             sound_modes: packet.sound_modes,
+             case_features: packet.case_features,
+@@ -99,6 +102,7 @@ impl Update<a3954::packets::inbound::A3954StateUpdatePacket> for A3954State {
+             equalizer_configuration,
+             hear_id,
+             button_configuration,
++            slide_button_configuration,
+             ambient_sound_mode_cycle,
+             sound_modes,
+             case_features,
+@@ -125,6 +129,7 @@ impl Update<a3954::packets::inbound::A3954StateUpdatePacket> for A3954State {
+         self.equalizer_configuration = equalizer_configuration;
+         self.hear_id = hear_id;
+         self.button_configuration = button_configuration;
++        self.slide_button_configuration = slide_button_configuration;
+         self.ambient_sound_mode_cycle = ambient_sound_mode_cycle;
+         self.sound_modes = sound_modes;
+         self.case_features = case_features;
+diff --git a/lib/src/devices/soundcore/common/device.rs b/lib/src/devices/soundcore/common/device.rs
+index 8f1130a8..e48af03f 100644
+--- a/lib/src/devices/soundcore/common/device.rs
++++ b/lib/src/devices/soundcore/common/device.rs
+@@ -512,7 +512,7 @@ where
+         &mut self,
+         settings: &'static ButtonConfigurationSettings<NUM_BUTTONS, NUM_PRESS_KINDS>,
+     ) where
+-        StateType: Has<ButtonStatusCollection<NUM_BUTTONS>>
++        StateType: MaybeHas<ButtonStatusCollection<NUM_BUTTONS>>
+             + Has<TwsStatus>
+             + Has<ResetButtonConfigurationPending>,
+     {
+@@ -973,6 +973,25 @@ pub mod test_utils {
+             assert_eq!(sent_packets_bytes, expected_packets_bytes);
+         }
+ 
++        /// Asserts that setting the values fails, and that no packets are sent in the process
++        pub async fn assert_set_settings_fails_without_sending_packets(
++            &mut self,
++            settings: Vec<(SettingId, Value)>,
++        ) {
++            self.clear_sent_packets().await;
++            let device = self.device.clone();
++            let join_handle =
++                tokio::spawn(async move { device.set_setting_values(settings).await });
++
++            let mut sent_packets = Vec::new();
++            let result = select! {
++                 _ = self.gather_sent_packets(&mut sent_packets) => None,
++                 result = join_handle => Some(result.unwrap()),
++            };
++            assert!(matches!(result, Some(Err(_))), "setting values should fail");
++            assert_eq!(sent_packets, Vec::<Vec<u8>>::new());
++        }
++
+         #[must_use]
+         pub async fn set_settings_and_gather_sent_packets(
+             &mut self,
+diff --git a/lib/src/devices/soundcore/common/modules/button_configuration.rs b/lib/src/devices/soundcore/common/modules/button_configuration.rs
+index 0b8d01f5..dfcd040a 100644
+--- a/lib/src/devices/soundcore/common/modules/button_configuration.rs
++++ b/lib/src/devices/soundcore/common/modules/button_configuration.rs
+@@ -1,6 +1,6 @@
+ use std::sync::Arc;
+ 
+-use openscq30_lib_has::Has;
++use openscq30_lib_has::{Has, MaybeHas};
+ use setting_handler::ButtonConfigurationSettingHandler;
+ use state_modifier::ButtonConfigurationStateModifier;
+ 
+@@ -280,7 +280,7 @@ where
+         packet_io: Arc<PacketIOController>,
+         settings: &'static ButtonConfigurationSettings<NUM_BUTTONS, NUM_PRESS_KINDS>,
+     ) where
+-        T: Has<ButtonStatusCollection<NUM_BUTTONS>> + Has<ResetButtonConfigurationPending>,
++        T: MaybeHas<ButtonStatusCollection<NUM_BUTTONS>> + Has<ResetButtonConfigurationPending>,
+     {
+         const {
+             assert!(
+diff --git a/lib/src/devices/soundcore/common/modules/button_configuration/setting_handler.rs b/lib/src/devices/soundcore/common/modules/button_configuration/setting_handler.rs
+index bfd97f32..f7487ee4 100644
+--- a/lib/src/devices/soundcore/common/modules/button_configuration/setting_handler.rs
++++ b/lib/src/devices/soundcore/common/modules/button_configuration/setting_handler.rs
+@@ -1,7 +1,7 @@
+ use std::borrow::Cow;
+ 
+ use async_trait::async_trait;
+-use openscq30_lib_has::Has;
++use openscq30_lib_has::{Has, MaybeHas};
+ 
+ use crate::{
+     api::settings::{Setting, SettingId, Value},
+@@ -35,7 +35,7 @@ impl<const NUM_BUTTONS: usize, const NUM_PRESS_KINDS: usize>
+ impl<T, const NUM_BUTTONS: usize, const NUM_PRESS_KINDS: usize> SettingHandler<T>
+     for ButtonConfigurationSettingHandler<NUM_BUTTONS, NUM_PRESS_KINDS>
+ where
+-    T: Has<ButtonStatusCollection<NUM_BUTTONS>> + Has<TwsStatus> + Send,
++    T: MaybeHas<ButtonStatusCollection<NUM_BUTTONS>> + Has<TwsStatus> + Send,
+ {
+     fn settings(&self) -> Vec<SettingId> {
+         self.settings_inner()
+@@ -43,7 +43,7 @@ where
+ 
+     fn get(&self, state: &T, setting_id: &SettingId) -> Option<Setting> {
+         let tws_status: TwsStatus = *state.get();
+-        let statuses: &ButtonStatusCollection<_> = state.get();
++        let statuses: &ButtonStatusCollection<_> = state.maybe_get()?;
+ 
+         self.get_inner(tws_status, statuses, *setting_id)
+     }
+@@ -55,7 +55,9 @@ where
+         value: Value,
+     ) -> SettingHandlerResult<()> {
+         let tws_status: TwsStatus = *state.get();
+-        let statuses: &mut ButtonStatusCollection<_> = state.get_mut();
++        let statuses: &mut ButtonStatusCollection<_> = state
++            .maybe_get_mut()
++            .ok_or(SettingHandlerError::MissingData)?;
+ 
+         self.set_inner(tws_status, statuses, *setting_id, value)
+     }
+diff --git a/lib/src/devices/soundcore/common/modules/button_configuration/state_modifier.rs b/lib/src/devices/soundcore/common/modules/button_configuration/state_modifier.rs
+index 5b7d2fae..401c8ea3 100644
+--- a/lib/src/devices/soundcore/common/modules/button_configuration/state_modifier.rs
++++ b/lib/src/devices/soundcore/common/modules/button_configuration/state_modifier.rs
+@@ -1,5 +1,5 @@
+ use async_trait::async_trait;
+-use openscq30_lib_has::Has;
++use openscq30_lib_has::{Has, MaybeHas};
+ use std::sync::Arc;
+ use tokio::sync::watch;
+ 
+@@ -53,7 +53,7 @@ impl<const NUM_BUTTONS: usize, const NUM_PRESS_KINDS: usize>
+ impl<const NUM_BUTTONS: usize, const NUM_PRESS_KINDS: usize, T> StateModifier<T>
+     for ButtonConfigurationStateModifier<NUM_BUTTONS, NUM_PRESS_KINDS>
+ where
+-    T: Has<ButtonStatusCollection<NUM_BUTTONS>>
++    T: MaybeHas<ButtonStatusCollection<NUM_BUTTONS>>
+         + Has<ResetButtonConfigurationPending>
+         + Clone
+         + Send
+@@ -70,11 +70,21 @@ where
+             return Ok(());
+         }
+ 
+-        let target_statuses: &ButtonStatusCollection<NUM_BUTTONS> = target_state.get();
++        // The device may not report this button configuration, in which case we have nothing to
++        // compare against, so don't send anything.
++        let Some(target_statuses) =
++            MaybeHas::<ButtonStatusCollection<NUM_BUTTONS>>::maybe_get(target_state)
++        else {
++            return Ok(());
++        };
+ 
+         let num_changes: usize = {
+             let state = state_sender.borrow();
+-            let statuses: &ButtonStatusCollection<NUM_BUTTONS> = state.get();
++            let Some(statuses) =
++                MaybeHas::<ButtonStatusCollection<NUM_BUTTONS>>::maybe_get(&*state)
++            else {
++                return Ok(());
++            };
+             statuses
+                 .0
+                 .iter()
+@@ -98,12 +108,22 @@ where
+                     .to_packet(),
+                 )
+                 .await?;
+-            state_sender.send_modify(|state| *state.get_mut() = *target_statuses);
++            state_sender.send_modify(|state| {
++                if let Some(statuses) =
++                    MaybeHas::<ButtonStatusCollection<NUM_BUTTONS>>::maybe_get_mut(state)
++                {
++                    *statuses = *target_statuses;
++                }
++            });
+         } else {
+             for (i, target) in target_statuses.0.iter().enumerate() {
+-                let current =
+-                    <T as Has<ButtonStatusCollection<NUM_BUTTONS>>>::get(&state_sender.borrow()).0
+-                        [i];
++                let Some(current) = MaybeHas::<ButtonStatusCollection<NUM_BUTTONS>>::maybe_get(
++                    &*state_sender.borrow(),
++                )
++                .map(|statuses| statuses.0[i]) else {
++                    // A state update removed the button configuration while we were sending
++                    return Ok(());
++                };
+                 if current != *target {
+                     let ButtonData {
+                         button,
+@@ -141,8 +161,11 @@ where
+                             .await?;
+                     }
+                     state_sender.send_modify(|state| {
+-                        <T as Has<ButtonStatusCollection<NUM_BUTTONS>>>::get_mut(state).0[i] =
+-                            *target;
++                        if let Some(statuses) =
++                            MaybeHas::<ButtonStatusCollection<NUM_BUTTONS>>::maybe_get_mut(state)
++                        {
++                            statuses.0[i] = *target;
++                        }
+                     });
+                 }
+             }

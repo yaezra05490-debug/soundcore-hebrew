@@ -5,6 +5,7 @@
 התוכנה מבוססת על [OpenSCQ30](https://github.com/Oppzippy/OpenSCQ30), תוכנה חופשית בקוד פתוח, ונוספו לה:
 
 - **תמיכה ב-Soundcore Liberty 5 Pro.** התמיכה הבסיסית מבוססת על [PR #414](https://github.com/Oppzippy/OpenSCQ30/pull/414) של Igor Quirino, שעוד לא נכלל בגרסה הרשמית. נוספה לה קריאה של ההגדרות האמיתיות מהאוזניות ושל סוללת הקופסה.
+- **תיקון ל-Soundcore Liberty 4 Pro עם קושחה ישנה** (חדש בגרסה 2.1). באוזניות עם קושחה ישנה, למשל 03.23, ההתחברות נכשלה בשגיאה. התיקון הוא [PR #381](https://github.com/Oppzippy/OpenSCQ30/pull/381) של Y-PLONI, שעוד לא נכלל בגרסה הרשמית. באוזניות כאלה ההגדרות של החלקה למעלה ולמטה לא מופיעות. אצלנו התיקון עבר רק בדיקות אוטומטיות, כי אין לנו Liberty 4 Pro. מי שמנסה מוזמן לכתוב אם זה עובד, בלשונית [Issues](https://github.com/yaezra05490-debug/soundcore-hebrew/issues).
 - **תרגום מלא לעברית.** התרגום שהיה בפרויקט היה חלקי, והושלם ותוקן.
 - **קיצורי מקלדת** להחלפת מצב השמע ולהצגת הסוללה.
 
@@ -68,9 +69,10 @@
 
 התוכנה מופצת ברישיון [GPL-3.0](LICENSE.txt), כמו OpenSCQ30.
 
-- [`source/hebrew-and-d1203-state.patch`](source/hebrew-and-d1203-state.patch) מכיל את כל השינויים שנעשו מעל PR #414.
+- [`source/hebrew-and-d1203-state.patch`](source/hebrew-and-d1203-state.patch) מכיל את השינויים שנעשו מעל PR #414: התרגום והקריאה של ההגדרות ב-Liberty 5 Pro.
+- [`source/liberty-4-pro-old-firmware.patch`](source/liberty-4-pro-old-firmware.patch) מכיל את התיקון ל-Liberty 4 Pro (‏PR #381), שנוסף בגרסה 2.1.
 - [`source/SoundcoreHotkeys.cs`](source/SoundcoreHotkeys.cs) הוא הקוד של תוכנת הקיצורים.
 - [`source/BUILD.md`](source/BUILD.md) מסביר איך לבנות את התוכנה מחדש.
 - בכל גרסה בדף הגרסאות מצורף גם קוד המקור המלא שממנו נבנתה.
 
-תודה ל-[Oppzippy](https://github.com/Oppzippy) על OpenSCQ30 ול-[Igor Quirino](https://github.com/Oppzippy/OpenSCQ30/pull/414) על התמיכה ב-Liberty 5 Pro.
+תודה ל-[Oppzippy](https://github.com/Oppzippy) על OpenSCQ30, ל-[Igor Quirino](https://github.com/Oppzippy/OpenSCQ30/pull/414) על התמיכה ב-Liberty 5 Pro ול-[Y-PLONI](https://github.com/Oppzippy/OpenSCQ30/pull/381) על התיקון ל-Liberty 4 Pro.

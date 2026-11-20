@@ -2,7 +2,7 @@
 
 ## התוכנה (openscq30-gui.exe ו-openscq30.exe)
 
-הבסיס הוא OpenSCQ30 גרסה 2.13.0 בתוספת PR #414 (ה-commit `83144843bbcaf23884e8d134b2b66bb2925d8310`). מעליו מחילים את `hebrew-and-d1203-state.patch`.
+הבסיס הוא OpenSCQ30 גרסה 2.13.0 בתוספת PR #414 (ה-commit `83144843bbcaf23884e8d134b2b66bb2925d8310`). מעליו מחילים את `hebrew-and-d1203-state.patch`, ואחריו את `liberty-4-pro-old-firmware.patch` (מגרסה 2.1).
 
 נדרש Rust 1.99.1 (הגרסה שב-`.build-tool-versions` של הפרויקט).
 
@@ -12,15 +12,19 @@ cd OpenSCQ30
 git fetch origin pull/414/head
 git checkout 83144843bbcaf23884e8d134b2b66bb2925d8310
 git apply path\to\hebrew-and-d1203-state.patch
-cargo build --profile release-fast --package openscq30-gui --package openscq30-cli
+git apply path\to\liberty-4-pro-old-firmware.patch
+cargo build --locked --profile release-fast --package openscq30-gui --package openscq30-cli
 ```
 
 הקבצים נוצרים ב-`target\release-fast\`.
 
-הבדיקות של Liberty 5 Pro (דגם D1203):
+כדאי לבנות בתיקייה עם נתיב קצר, למשל `C:\build`. בנתיב ארוך ההורדה של ספריית הממשק (libcosmic) נכשלת בשגיאת `path too long`.
+
+הבדיקות של Liberty 5 Pro (דגם D1203) ושל Liberty 4 Pro (דגם A3954):
 
 ```
-cargo test --package openscq30-lib d1203
+cargo test --locked --package openscq30-lib --lib d1203
+cargo test --locked --package openscq30-lib --lib a3954
 ```
 
 אם ה-commit כבר לא זמין ב-GitHub, למשל כי ה-PR עודכן, קוד המקור המלא אחרי החלת השינויים מצורף לכל גרסה בדף הגרסאות (`OpenSCQ30-hebrew-source.zip`).
@@ -42,6 +46,10 @@ cargo test --package openscq30-lib d1203
 
   "שמע מרחבי" מוסתר בקושחה 05.33, כי היא לא תומכת בו.
 - בבדיקה שמשתמשת בחבילת מצב אמיתית, המספר הסידורי וכתובת הבלוטות' הוחלפו באפסים. לבדיקות זה לא משנה, והן לא נכללות בקובצי התוכנה.
+
+### מה `liberty-4-pro-old-firmware.patch` משנה
+
+זה [PR #381](https://github.com/Oppzippy/OpenSCQ30/pull/381) של Y-PLONI מהפרויקט המקורי, בלי שינוי. אוזניות Liberty 4 Pro עם קושחה ישנה (למשל 03.23) שולחות חבילת מצב של 161 בתים, בלי ארבעת הבתים של הגדרות ההחלקה, וההתחברות אליהן נכשלה. אחרי התיקון חבילה כזאת מתקבלת, וההגדרות של ההחלקה פשוט לא מוצגות. הקוד של Liberty 5 Pro לא משתנה.
 
 ## תוכנת הקיצורים (SoundcoreHotkeys.exe)
 
